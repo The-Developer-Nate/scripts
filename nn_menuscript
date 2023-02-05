@@ -1,0 +1,4062 @@
+-- Decompiled with the Synapse X Luau decompiler.
+
+
+
+local l__RunService__1 = game:GetService("RunService");
+local l__UserInputService__2 = game:GetService("UserInputService");
+local l__ReplicatedStorage__3 = game:GetService("ReplicatedStorage");
+local l__TweenService__4 = game:GetService("TweenService");
+local l__Debris__5 = game:GetService("Debris");
+local l__HttpService__6 = game:GetService("HttpService");
+local l__shopenabled__7 = game:GetService("ReplicatedStorage"):WaitForChild("values"):WaitForChild("debug"):WaitForChild("shopenabled");
+local v8 = require(l__ReplicatedStorage__3:WaitForChild("items"):WaitForChild("itemData"));
+local l__Players__9 = game:GetService("Players");
+local l__LocalPlayer__10 = l__Players__9.LocalPlayer;
+local l__PlayerGui__11 = game.Players.LocalPlayer.PlayerGui;
+local l__main__12 = script.Parent:WaitForChild("main");
+local l__title__13 = l__main__12:WaitForChild("title");
+local l__loadingtext__14 = l__title__13:WaitForChild("loadingtext");
+local l__values__15 = l__LocalPlayer__10.PlayerScripts:WaitForChild("values");
+local l__ContentProvider__16 = game:GetService("ContentProvider");
+local l__values__17 = l__ReplicatedStorage__3:WaitForChild("values");
+local l__specifics__18 = l__values__17:WaitForChild("specifics");
+local l__black__19 = l__PlayerGui__11:WaitForChild("black");
+l__black__19.Enabled = true;
+local l__sfx__20 = script:WaitForChild("sfx");
+if not game:IsLoaded() then
+	game.Loaded:Wait();
+end;
+local l__respawnchar__21 = l__ReplicatedStorage__3:WaitForChild("events"):WaitForChild("player"):WaitForChild("char"):WaitForChild("respawnchar");
+local l__changezone__22 = l__ReplicatedStorage__3:WaitForChild("events"):WaitForChild("player"):WaitForChild("char"):WaitForChild("changezone");
+local v23 = require(game.ReplicatedStorage.module.shortenModule);
+local v24 = require(game.ReplicatedStorage.module.timeModule);
+local v25 = require(game.ReplicatedStorage.module.MouseOverModule);
+local v26 = require(game.ReplicatedStorage.module.commaModule);
+local l__SoundService__1 = game:GetService("SoundService");
+local l__logoplacement__2 = l__title__13:WaitForChild("logoplacement");
+local l__title__3 = l__title__13:WaitForChild("title");
+local l__buttons__4 = l__main__12:WaitForChild("buttons");
+local l__logo__5 = l__title__13:WaitForChild("logo");
+function resetGui()
+	startedAlready = false;
+	changingTitle = false;
+	diffScreen = false;
+	l__SoundService__1.all.ambient.Volume = 0;
+	l__SoundService__1.all.entities.Volume = 0;
+	script.Parent.main.play.display.Position = UDim2.new(1.195, 0, 0.499, 0);
+	script.Parent.main.play.display.Size = UDim2.new(0.4, 0, 0.55, 0);
+	script.Parent.main.play.black.BackgroundTransparency = 1;
+	script.Parent.Enabled = true;
+	l__logoplacement__2.ImageTransparency = 1;
+	l__title__3.TextTransparency = 1;
+	l__title__3.Text = "ico's nextbots";
+	local v27, v28, v29 = pairs(l__buttons__4:GetChildren());
+	while true do
+		local v30, v31 = v27(v28, v29);
+		if v30 then
+
+		else
+			break;
+		end;
+		v29 = v30;
+		if v31:IsA("TextButton") then
+			v31.TextTransparency = 1;
+			v31.Visible = false;
+		end;	
+	end;
+	l__logo__5.ImageTransparency = 0;
+end;
+local l__vhs__6 = script.Parent:WaitForChild("vhs");
+local l__CurrentCamera__7 = workspace.CurrentCamera;
+function setUp()
+	l__vhs__6.Visible = true;
+	l__CurrentCamera__7.CameraType = Enum.CameraType.Scriptable;
+	l__CurrentCamera__7.FieldOfView = 45;
+	local v32 = (game.ReplicatedStorage:FindFirstChild(l__LocalPlayer__10.Team.Name):FindFirstChild("cams") or game.ReplicatedStorage:FindFirstChild("nn_mall"):FindFirstChild("cams")):GetChildren();
+	local v33 = v32[math.random(#v32)];
+	l__LocalPlayer__10.ReplicationFocus = v33;
+	l__CurrentCamera__7.CFrame = v33.CFrame;
+	local v34, v35, v36 = pairs(game.Lighting:GetChildren());
+	while true do
+		local v37, v38 = v34(v35, v36);
+		if v37 then
+
+		else
+			break;
+		end;
+		v36 = v37;
+		if v38.Name ~= "Atmosphere" then
+			if not v38:IsA("Sky") then
+				if v38.Name ~= "Bloom" then
+					if v38.Name ~= "ColorCorrection" then
+						if v38.Name ~= "DepthOfField" then
+							if v38.Name ~= "event" then
+								v38:Destroy();
+							end;
+						end;
+					end;
+				end;
+			end;
+		end;	
+	end;
+	local v39 = script.vhs:Clone();
+	v39.Parent = game.Lighting;
+	v39.Enabled = true;
+	l__buttons__4.Position = UDim2.new(0, 0, 0.1, 0);
+end;
+local l__skip__40 = l__title__13:WaitForChild("skip");
+num = 0;
+spinning = false;
+skipped = false;
+l__skip__40.Activated:Connect(function()
+	if l__skip__40.Visible and not skipped then
+		skipped = true;
+	end;
+end);
+local u8 = { "safezones don't make you invincible lol", "time your jumps correctly and your speed will increase!", "feeling brave? try enabling jumpscares! they totally aren't a joke feauture", "you should try drinking multiple bloxy colas, what could go wrong!", "have you tried playing in third person?", "events can increase your point gain up to 1.5x!", "the more points, the more nextbux!", "you can return to the menu using the leaderboard or hitting m in a saferoom!", "any questions, suggestions or bugs? join our communications server!", "check our socials for updates!", "have you tried ragdolling through a window?", "play untitled tag game!", "you can run, but you cant hide.", "there is a man behind you.", "did you make sure to lock all the entrances to your home", "you didn't lock your door.", "this is a tip!", "", "there's no fall damage yet, go ahead and hurl yourself off of things!", "we will be updating again very soon!", "please report any bugs you find!", "please do not harrass devs of other similar games", "also try EVADE!", "also try Untitled Tag Game!", "also try GMOD!", "also try Randomizer!", "also try Meme Regime!", "also try 3008!", "also try nico's mod (which we did not make)", "also try RUNNING FROM THE INTERNET!", "the soundtrack is on all listening platforms!", "remember to take breaks and stay hydrated!", "Bhopping is a very useful skill to learn!", "Hit R to ragdoll", "just don't die lol", "h\204\183\205\128\205\141e\204\184\204\149\204\152 \204\183\204\135\204\167w\204\180\204\191\204\166a\204\181\204\146\204\168t\204\183\204\146\204\177c\204\181\205\151\204\175h\204\181\204\139\204\160e\204\184\205\132\204\173s\204\181\204\135\204\151", "please don't abuse bugs!", "We did not make nico's mod", "Some nextbots have unique behavior", "There are TONS of unique features in VIP servers! Some are still WIP though.", "--NOTE TO RIKER: please remove this text and replace it with something else. i couldn't think of anything bad to say", "--NOTE TO HOLIDAE: please remove this text and replace it with something else. also can you please stop doing that one thing? thanks", "--NOTE TO JASPER: please remove this text and replace it with something else. also please stop sending that gif in the group chat. it scares my dad", "--NOTE TO NICOLAIXENO: please remove this text and replace it with something else", "--NOTE TO NICOPATTY: please remove this text and replace it with something else. also can you stop napping during our meetings. thanks", "--NOTE TO WAL00G: please remove this text and replace it with something else. please keep your hot takes off of the official twitter account. thank you." };
+function loading()
+	skipped = false;
+	resetGui();
+	l__logo__5.black.BackgroundTransparency = 0;
+	l__TweenService__4:Create(l__black__19.black, TweenInfo.new(3), {
+		BackgroundTransparency = 1
+	}):Play();
+	l__ContentProvider__16:PreloadAsync({ l__title__13.loadingbg, l__sfx__20.loading });
+	task.wait(1);
+	local l__controls__41 = script.Parent.main:WaitForChild("controls");
+	local l__keyboard__42 = l__controls__41:WaitForChild("keyboard");
+	local l__controller__43 = l__controls__41:WaitForChild("controller");
+	if l__UserInputService__2.KeyboardEnabled then
+		task.spawn(function()
+			l__keyboard__42.Visible = true;
+			local v44, v45, v46 = pairs(l__keyboard__42:GetDescendants());
+			while true do
+				local v47, v48 = v44(v45, v46);
+				if v47 then
+
+				else
+					break;
+				end;
+				v46 = v47;
+				if v48:IsA("Frame") then
+					l__TweenService__4:Create(v48, TweenInfo.new(2), {
+						BackgroundTransparency = 0.95
+					}):Play();
+				elseif v48:IsA("TextLabel") then
+					l__TweenService__4:Create(v48, TweenInfo.new(2), {
+						TextTransparency = 0.2
+					}):Play();
+				end;			
+			end;
+		end);
+	elseif l__UserInputService__2.GamepadEnabled then
+		task.spawn(function()
+			l__controller__43.Visible = true;
+			l__TweenService__4:Create(l__controller__43.ImageLabel, TweenInfo.new(2), {
+				ImageTransparency = 0.2
+			}):Play();
+		end);
+	end;
+	local v49 = TweenInfo.new(2, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut);
+	l__TweenService__4:Create(l__logo__5, v49, {
+		Position = UDim2.new(0.439, 0, 0.5, 0)
+	}):Play();
+	l__TweenService__4:Create(l__loadingtext__14, v49, {
+		Position = UDim2.new(0.466, 0, 0.5, 0), 
+		TextTransparency = 0
+	}):Play();
+	l__skip__40.Visible = true;
+	l__TweenService__4:Create(l__skip__40, v49, {
+		TextTransparency = 0.2, 
+		BackgroundTransparency = 0.9
+	}):Play();
+	local v50 = game.StarterGui:GetDescendants();
+	local v51 = { "rbxassetid://10665285890", "rbxassetid://10665285662", "rbxassetid://10665286139" };
+	local v52, v53, v54 = pairs((l__PlayerGui__11:GetDescendants()));
+	while true do
+		local v55, v56 = v52(v53, v54);
+		if v55 then
+
+		else
+			break;
+		end;
+		v54 = v55;
+		if not v56:IsA("ImageLabel") then
+			if not v56:IsA("ImageButton") then
+				if v56:IsA("Sound") then
+					table.insert(v51, v56);
+				end;
+			else
+				table.insert(v51, v56);
+			end;
+		else
+			table.insert(v51, v56);
+		end;	
+	end;
+	local v57, v58, v59 = pairs(v50);
+	while true do
+		local v60, v61 = v57(v58, v59);
+		if v60 then
+
+		else
+			break;
+		end;
+		v59 = v60;
+		if not v61:IsA("ImageLabel") then
+			if not v61:IsA("ImageButton") then
+				if v61:IsA("Sound") then
+					table.insert(v51, v61);
+				end;
+			else
+				table.insert(v51, v61);
+			end;
+		else
+			table.insert(v51, v61);
+		end;	
+	end;
+	num = 0;
+	l__loadingtext__14.Text = "loading... 0/" .. #v51;
+	task.wait(1);
+	local u9 = nil;
+	task.spawn(function()
+		task.wait(1);
+		while true do
+			u9 = nil;
+			while true do
+				local v62 = u8[math.random(#u8)];
+				if v62 ~= u9 then
+					u9 = v62;
+				end;
+				if u9 == nil then
+
+				else
+					break;
+				end;			
+			end;
+			local v63 = #u9;
+			local v64 = 1 - 1;
+			while true do
+				l__title__13.tip.Text = "tip: " .. string.sub(u9, 1, v64);
+				task.wait(0.0175);
+				if 0 <= 1 then
+					if v64 < v63 then
+
+					else
+						break;
+					end;
+				elseif v63 < v64 then
+
+				else
+					break;
+				end;
+				v64 = v64 + 1;			
+			end;
+			l__title__13.tip.Text = "tip: " .. u9;
+			task.wait(10);
+			local v65 = #u9;
+			local v66 = 1 - 1;
+			while true do
+				l__title__13.tip.Text = "tip: " .. string.sub(u9, v66);
+				task.wait(0.0175);
+				if 0 <= 1 then
+					if v66 < v65 then
+
+					else
+						break;
+					end;
+				elseif v65 < v66 then
+
+				else
+					break;
+				end;
+				v66 = v66 + 1;			
+			end;
+			l__title__13.tip.Text = "tip: ";
+			task.wait(1);
+			if l__loadingtext__14.Text ~= "complete" then
+
+			else
+				break;
+			end;		
+		end;
+	end);
+	l__TweenService__4:Create(l__logo__5.black, v49, {
+		BackgroundTransparency = 1
+	}):Play();
+	spinning = true;
+	task.wait(2);
+	l__TweenService__4:Create(l__title__13.loadingbg, v49, {
+		ImageTransparency = 0.6
+	}):Play();
+	l__sfx__20.loading:Play();
+	local v67 = #v51;
+	local v68 = 1 - 1;
+	while true do
+		l__ContentProvider__16:PreloadAsync({ v51[v68] });
+		l__loadingtext__14.Text = "loading... " .. v68 .. "/" .. #v51;
+		if not skipped then
+
+		else
+			break;
+		end;
+		if 0 <= 1 then
+			if v68 < v67 then
+
+			else
+				break;
+			end;
+		elseif v67 < v68 then
+
+		else
+			break;
+		end;
+		v68 = v68 + 1;	
+	end;
+	l__TweenService__4:Create(l__skip__40, v49, {
+		TextTransparency = 1, 
+		BackgroundTransparency = 1
+	}):Play();
+	task.wait(0.5);
+	l__loadingtext__14.Text = "complete";
+	l__sfx__20.load:Play();
+	task.wait(1);
+	l__TweenService__4:Create(l__loadingtext__14, v49, {
+		TextTransparency = 1
+	}):Play();
+	l__TweenService__4:Create(l__title__13.loadingbg, v49, {
+		ImageTransparency = 1
+	}):Play();
+	l__TweenService__4:Create(l__title__13.tip, v49, {
+		TextTransparency = 1
+	}):Play();
+	l__TweenService__4:Create(l__sfx__20.loading, v49, {
+		PlaybackSpeed = 0
+	}):Play();
+	local v69, v70, v71 = pairs(l__keyboard__42:GetDescendants());
+	while true do
+		local v72, v73 = v69(v70, v71);
+		if v72 then
+
+		else
+			break;
+		end;
+		v71 = v72;
+		if v73:IsA("Frame") then
+			l__TweenService__4:Create(v73, TweenInfo.new(1), {
+				BackgroundTransparency = 1
+			}):Play();
+		elseif v73:IsA("TextLabel") then
+			l__TweenService__4:Create(v73, TweenInfo.new(1), {
+				TextTransparency = 1
+			}):Play();
+		end;	
+	end;
+	l__TweenService__4:Create(l__controller__43.ImageLabel, TweenInfo.new(2), {
+		ImageTransparency = 1
+	}):Play();
+	task.wait(2);
+	l__sfx__20.loading:Stop();
+	l__skip__40.Visible = false;
+	spinning = false;
+end;
+local l__finished_menu_anim__10 = script.finished_menu_anim;
+local u11 = false;
+function menu()
+	l__UserInputService__2.MouseIconEnabled = true;
+	resetGui();
+	setUp();
+	l__LocalPlayer__10:SetAttribute("InMenu", true);
+	game.SoundService.AmbientReverb = Enum.ReverbType.GenericReverb;
+	l__finished_menu_anim__10.Value = false;
+	if u11 then
+		l__logo__5.Rotation = 0;
+		l__logo__5.Size = UDim2.new(0.075, 0, 0.075, 0);
+		l__logo__5.Position = UDim2.new(0.5, 0, 0.5, 0);
+	else
+		u11 = true;
+	end;
+	l__TweenService__4:Create(l__logo__5, TweenInfo.new(2, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {
+		Position = l__logoplacement__2.Position, 
+		Size = l__logoplacement__2.Size, 
+		Rotation = -360
+	}):Play();
+	l__loadingtext__14.Visible = false;
+	task.wait(0.5);
+	l__TweenService__4:Create(l__black__19.black, TweenInfo.new(3), {
+		BackgroundTransparency = 1
+	}):Play();
+	l__sfx__20.bgm:Play();
+	l__sfx__20.static:Play();
+	local v74 = TweenInfo.new(2, Enum.EasingStyle.Quart);
+	l__TweenService__4:Create(l__title__3, v74, {
+		TextTransparency = 0
+	}):Play();
+	l__TweenService__4:Create(l__main__12, v74, {
+		BackgroundTransparency = 1
+	}):Play();
+	l__TweenService__4:Create(l__buttons__4, v74, {
+		Position = UDim2.new(0, 0, 0, 0)
+	}):Play();
+	local v75, v76, v77 = pairs(l__buttons__4:GetChildren());
+	while true do
+		local v78, v79 = v75(v76, v77);
+		if v78 then
+
+		else
+			break;
+		end;
+		v77 = v78;
+		if v79:IsA("TextButton") then
+			if not l__shopenabled__7.Value then
+				if v79.Name ~= "shop" then
+					v79.Visible = true;
+					l__TweenService__4:Create(v79, v74, {
+						TextTransparency = 0.5
+					}):Play();
+				end;
+			else
+				v79.Visible = true;
+				l__TweenService__4:Create(v79, v74, {
+					TextTransparency = 0.5
+				}):Play();
+			end;
+		end;	
+	end;
+	task.wait(1);
+	l__finished_menu_anim__10.Value = true;
+end;
+covering = false;
+function vhs()
+	l__vhs__6.leftbar.jitter.Position = UDim2.new(0.05, 0, Random.new():NextInteger(-1000, 0) / 1000, 0);
+	l__vhs__6.rightbar.jitter.Position = UDim2.new(0.05, 0, Random.new():NextInteger(-1000, 0) / 1000, 0);
+	l__vhs__6.rgbstatic.Position = UDim2.new(Random.new():NextInteger(-1125, 125) / 1000, 0, 0, 0);
+	l__vhs__6.static.Position = UDim2.new(-Random.new():NextInteger(20, 80) / 100, 0, -Random.new():NextInteger(20, 80) / 100, 0);
+	l__vhs__6.whitestat.Position = UDim2.new(Random.new():NextInteger(-1125, 125) / 1000, 0, 0, 0);
+	l__vhs__6.coverstatic.Position = UDim2.new(math.random(-100, 0) / 100, 0, 0, 0);
+	if not covering then
+		if math.random(0, 50) == 0 then
+			if not covering then
+				if l__vhs__6.coverstatic.ImageTransparency <= 0.5 then
+					l__vhs__6.coverstatic.ImageTransparency = math.random(50, 90) / 100;
+				end;
+			end;
+		end;
+		if not script.Parent.Parent.shopGui.Enabled then
+			l__vhs__6.coverstatic.ImageTransparency = l__vhs__6.coverstatic.ImageTransparency + (0.9 - l__vhs__6.coverstatic.ImageTransparency) * 0.1;
+			l__vhs__6.coverstatic.BackgroundTransparency = l__vhs__6.coverstatic.BackgroundTransparency + (1 - l__vhs__6.coverstatic.BackgroundTransparency) * 0.1;
+		else
+			l__vhs__6.coverstatic.ImageTransparency = l__vhs__6.coverstatic.ImageTransparency + (0.99 - l__vhs__6.coverstatic.ImageTransparency) * 0.1;
+			l__vhs__6.coverstatic.BackgroundTransparency = l__vhs__6.coverstatic.BackgroundTransparency + (1 - l__vhs__6.coverstatic.BackgroundTransparency) * 0.1;
+		end;
+	else
+		l__vhs__6.coverstatic.ImageTransparency = 0.4;
+		l__vhs__6.coverstatic.BackgroundTransparency = 0;
+	end;
+	if l__sfx__20.static.IsPlaying then
+		l__sfx__20.static.Volume = 1 - l__vhs__6.coverstatic.ImageTransparency;
+	end;
+	local v80, v81, v82 = pairs(l__vhs__6:GetChildren());
+	while true do
+		local v83, v84 = v80(v81, v82);
+		if v83 then
+
+		else
+			break;
+		end;
+		v82 = v83;
+		if v84.Name == "scanline" then
+			if not script.Parent.Parent.shopGui.Enabled then
+				v84.image.Position = UDim2.new(math.random(-125, 125) / 1000, v84.image.Position.X.Offset, math.random(-200, 200) / 100, v84.image.Position.Y.Offset);
+				v84.image.ImageTransparency = math.random(0, 100) / 100;
+				v84.image.BackgroundTransparency = math.random(95, 100) / 100;
+			else
+				v84.image.Position = UDim2.new(math.random(-125, 125) / 1000, v84.image.Position.X.Offset, math.random(-200, 200) / 100, v84.image.Position.Y.Offset);
+				v84.image.ImageTransparency = math.random(95, 100) / 100;
+				v84.image.BackgroundTransparency = 1;
+			end;
+		end;	
+	end;
+end;
+local function u12()
+	local v85 = script.scanline:Clone();
+	v85.Parent = l__vhs__6;
+	local v86 = math.random(3, 6);
+	v85:TweenPosition(UDim2.new(0, 0, -0.05, 0), nil, Enum.EasingStyle.Linear, v86);
+	l__Debris__5:AddItem(v85, v86);
+end;
+task.spawn(function()
+	while task.wait(6) do
+		if l__vhs__6.Visible then
+			u12();
+		end;	
+	end;
+end);
+task.spawn(function()
+	while task.wait(math.random(1, 15)) do
+		if l__finished_menu_anim__10.Value and script.Parent.Enabled and not shop then
+			covering = true;
+			local v87 = game.ReplicatedStorage:FindFirstChild(l__LocalPlayer__10.Team.Name):FindFirstChild("cams") and game.ReplicatedStorage:FindFirstChild(l__LocalPlayer__10.Team.Name).cams:GetChildren() or game.ReplicatedStorage.nn_mall.cams:GetChildren();
+			local v88 = v87[math.random(#v87)];
+			l__LocalPlayer__10.ReplicationFocus = v88;
+			l__CurrentCamera__7.CFrame = v88.CFrame;
+			task.wait(0.5);
+			covering = false;
+		end;	
+	end;
+end);
+local l__settings__89 = script.Parent.main.Parent.Parent:WaitForChild("shopGui"):WaitForChild("invFrame"):WaitForChild("settings");
+local l__color__90 = l__settings__89:WaitForChild("color");
+local v91 = Color3.fromRGB();
+for v92, v93 in pairs(l__color__90:GetChildren()) do
+	if v93:FindFirstChild("isDragging") then
+		v93.sliderBounds.drag.MouseButton1Down:Connect(function()
+			v93.isDragging.Value = true;
+		end);
+	end;
+end;
+l__LocalPlayer__10.AttributeChanged:Connect(function(p1)
+	if p1 == "FlashlightColor" then
+		for v94, v95 in pairs(l__color__90:GetChildren()) do
+			if v95:FindFirstChild("isDragging") then
+				if v95.Name == "R" then
+					local v96 = l__LocalPlayer__10:GetAttribute("FlashlightColor").R * 255;
+					if not v96 then
+						if v95.Name == "G" then
+							v96 = l__LocalPlayer__10:GetAttribute("FlashlightColor").G * 255;
+							if not v96 then
+								v96 = false;
+								if v95.Name == "B" then
+									v96 = l__LocalPlayer__10:GetAttribute("FlashlightColor").B * 255;
+								end;
+							end;
+						else
+							v96 = false;
+							if v95.Name == "B" then
+								v96 = l__LocalPlayer__10:GetAttribute("FlashlightColor").B * 255;
+							end;
+						end;
+					end;
+				elseif v95.Name == "G" then
+					v96 = l__LocalPlayer__10:GetAttribute("FlashlightColor").G * 255;
+					if not v96 then
+						v96 = false;
+						if v95.Name == "B" then
+							v96 = l__LocalPlayer__10:GetAttribute("FlashlightColor").B * 255;
+						end;
+					end;
+				else
+					v96 = false;
+					if v95.Name == "B" then
+						v96 = l__LocalPlayer__10:GetAttribute("FlashlightColor").B * 255;
+					end;
+				end;
+				v95.val.Value = v96;
+				v95.val:SetAttribute("max", 255);
+				v95.val:SetAttribute("min", 0);
+				v95.sliderBounds.drag.Position = UDim2.new((255 - (255 - v96)) / 255 * 0.9, 0, 0, 0);
+				v95.sliderBounds.val.Text = math.floor(v96);
+				l__color__90.color.BackgroundColor3 = l__LocalPlayer__10:GetAttribute("FlashlightColor");
+			end;
+		end;
+	end;
+end);
+changingTitle = false;
+diffScreen = false;
+local u13 = TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.Out);
+local function v97(p2)
+	l__TweenService__4:Create(p2, u13, {
+		TextTransparency = 0.2, 
+		Size = UDim2.new(1, 0, 0.07, 0)
+	}):Play();
+end;
+local function v98(p3)
+	l__TweenService__4:Create(p3, u13, {
+		TextTransparency = 0.5, 
+		Size = UDim2.new(1, 0, 0.06, 0)
+	}):Play();
+end;
+local function u14(p4)
+	diffScreen = p4;
+	if p4 then
+		local v99 = TweenInfo.new(0.5, Enum.EasingStyle.Quart);
+		l__TweenService__4:Create(l__buttons__4, v99, {
+			Position = UDim2.new(-0.05, 0, 0, 0)
+		}):Play();
+		for v100, v101 in pairs(l__buttons__4:GetChildren()) do
+			if v101:IsA("TextButton") then
+				task.spawn(function()
+					l__TweenService__4:Create(v101, v99, {
+						TextTransparency = 1
+					}):Play();
+					task.wait(0.5);
+					v101.Visible = false;
+				end);
+			end;
+		end;
+		return;
+	end;
+	local v102 = TweenInfo.new(0.5, Enum.EasingStyle.Quart);
+	l__TweenService__4:Create(l__buttons__4, v102, {
+		Position = UDim2.new(0, 0, 0, 0)
+	}):Play();
+	for v103, v104 in pairs(l__buttons__4:GetChildren()) do
+		if v104:IsA("TextButton") and (l__shopenabled__7.Value or v104.Name ~= "shop") then
+			v104.Visible = true;
+			l__TweenService__4:Create(v104, v102, {
+				TextTransparency = 0.5
+			}):Play();
+		end;
+	end;
+end;
+local l__main__15 = script.Parent.main;
+buttonFunctions = {};
+function buttonFunctions.shop()
+	startShop();
+end;
+local function u16(p5, p6)
+	changingTitle = true;
+	local v105 = TweenInfo.new(0.1, Enum.EasingStyle.Quint, Enum.EasingDirection.Out);
+	l__title__3.typing.Position = UDim2.new(l__title__3.TextBounds.X / l__title__3.AbsoluteSize.X, 0, 0, 0);
+	l__title__3.typing.Visible = true;
+	l__TweenService__4:Create(l__title__13, TweenInfo.new(0.5, Enum.EasingStyle.Cubic, Enum.EasingDirection.Out), {
+		Size = UDim2.fromScale(p6 and 1, p6 and 1)
+	}):Play();
+	l__TweenService__4:Create(l__title__3.typing, v105, {
+		BackgroundTransparency = 0
+	}):Play();
+	while l__title__3.Text ~= "ico's " do
+		local v106 = l__sfx__20.typo:Clone();
+		v106.Parent = l__sfx__20;
+		v106:Play();
+		v106.Ended:Connect(function()
+			v106:Destroy();
+		end);
+		l__title__3.Text = string.sub(l__title__3.Text, 1, #l__title__3.Text - 1);
+		l__TweenService__4:Create(l__title__3.typing, v105, {
+			Position = UDim2.new(l__title__3.TextBounds.X / l__title__3.AbsoluteSize.X, 0, 0, 0)
+		}):Play();
+		task.wait(0.015);	
+	end;
+	task.wait(0.25);
+	if p5 == nil then
+		p5 = "nextbots";
+	end;
+	for v107 = 1, #p5 do
+		local v108 = l__sfx__20.typo:Clone();
+		v108.Parent = l__sfx__20;
+		v108:Play();
+		v108.Ended:Connect(function()
+			v108:Destroy();
+		end);
+		l__title__3.Text = "ico's " .. string.sub(p5, 1, v107);
+		l__TweenService__4:Create(l__title__3.typing, v105, {
+			Position = UDim2.new(l__title__3.TextBounds.X / l__title__3.AbsoluteSize.X, 0, 0, 0)
+		}):Play();
+		task.wait(0.015);
+	end;
+	l__TweenService__4:Create(l__title__3.typing, v105, {
+		BackgroundTransparency = 1
+	}):Play();
+	l__title__3.Text = "ico's " .. p5;
+	task.wait(0.1);
+	l__title__3.typing.Visible = false;
+	changingTitle = false;
+end;
+local function u17(p7, p8)
+	task.spawn(u14, p8);
+	if p7 == l__main__15.play then
+		for v109, v110 in pairs(l__main__15.play.maps:GetChildren()) do
+			if v110:IsA("ImageButton") then
+				if not (not v110:GetAttribute("MapId")) and not (not workspace:FindFirstChild(v110:GetAttribute("MapId"))) or (v110.Name == "voice" and not (not l__LocalPlayer__10:GetAttribute("HasVC")) or v110.Name == "practice") then
+					v110.locked.Visible = false;
+					if v110.Name == "voice" and not (not l__values__17.servers.vconly.Value) or v110.Name == "practice" and l__values__17.servers.socialspace.Value then
+						v110.text.Text = "return to main";
+						v110.Image = "rbxassetid://12146682685";
+					end;
+				else
+					v110.locked.Visible = true;
+					if v110.locked.Visible then
+						v110.locked.lock.ImageTransparency = 0.5;
+						v110.locked.static.ImageTransparency = 0.5;
+					end;
+				end;
+			end;
+		end;
+	end;
+	if not p8 then
+		l__TweenService__4:Create(p7, TweenInfo.new(0.5, Enum.EasingStyle.Quart), {
+			Position = UDim2.new(0.5, 0, 0.25, 0)
+		}):Play();
+		task.wait(0);
+		p7.Visible = false;
+		return;
+	end;
+	p7.Position = UDim2.new(0.5, 0, 0.25, 0);
+	p7.Visible = true;
+	l__TweenService__4:Create(p7, TweenInfo.new(0.5, Enum.EasingStyle.Quart), {
+		Position = UDim2.new(0.5, 0, 0.2, 0)
+	}):Play();
+end;
+function buttonFunctions.settings()
+	task.spawn(u16, "settings");
+	task.spawn(u17, l__main__15.settings, true);
+	l__sfx__20.bgmsettings.TimePosition = l__sfx__20.bgm.TimePosition - 0.7;
+	l__sfx__20.bgmsettings:Play();
+	l__TweenService__4:Create(l__sfx__20.bgm, TweenInfo.new(0.5, Enum.EasingStyle.Linear), {
+		Volume = 0
+	}):Play();
+	l__TweenService__4:Create(l__sfx__20.bgmsettings, TweenInfo.new(0.5, Enum.EasingStyle.Linear), {
+		Volume = 0.4
+	}):Play();
+	task.wait(0.5);
+	l__sfx__20.bgm:Stop();
+end;
+function buttonFunctions.play()
+	task.spawn(u16, "map selection");
+	task.spawn(u17, l__main__15.play, true);
+end;
+function buttonFunctions.howto()
+	task.spawn(u16, "tutorial");
+	task.spawn(u17, l__main__15.howto, true);
+end;
+function buttonFunctions.update()
+	task.spawn(u16, "patch notes");
+	task.spawn(u17, l__main__15.update, true);
+end;
+function buttonFunctions.credits()
+	task.spawn(u16, "credits");
+	task.spawn(u17, l__main__15.credits, true);
+end;
+for v111, v112 in pairs(l__buttons__4:GetChildren()) do
+	if v112:IsA("TextButton") and l__finished_menu_anim__10 then
+		local v113, v114 = v25.MouseEnterLeaveEvent(v112);
+		v113:Connect(function()
+			if not diffScreen and l__finished_menu_anim__10.Value and not startedAlready then
+				l__sfx__20.hover:Play();
+				v97(v112);
+			end;
+		end);
+		v114:Connect(function()
+			if not diffScreen and l__finished_menu_anim__10.Value and not startedAlready then
+				v98(v112);
+			end;
+		end);
+		v112.Activated:Connect(function()
+			l__sfx__20.click:Play();
+			if not changingTitle and not diffScreen and l__finished_menu_anim__10.Value and not startedAlready then
+				buttonFunctions[v112.Name]();
+			end;
+		end);
+	end;
+end;
+l__main__15.howto.exit.Activated:Connect(function()
+	l__sfx__20.click:Play();
+	task.spawn(u16, nil);
+	task.spawn(u17, l__main__15.howto, false);
+end);
+l__main__15.update.exit.Activated:Connect(function()
+	l__sfx__20.click:Play();
+	task.spawn(u16, nil);
+	task.spawn(u17, l__main__15.update, false);
+end);
+l__main__15.credits.exit.Activated:Connect(function()
+	l__sfx__20.click:Play();
+	task.spawn(u16, nil);
+	task.spawn(u17, l__main__15.credits, false);
+end);
+local l__settings__115 = l__main__15.settings;
+settingButtons = {};
+selected = l__settings__115.buttons.graphics;
+selected.TextTransparency = 0.2;
+selected.BackgroundTransparency = 0.7;
+local l__savesettings__18 = l__ReplicatedStorage__3:WaitForChild("events"):WaitForChild("game"):WaitForChild("global"):WaitForChild("savesettings");
+function saveSettings()
+	local v116, v117, v118 = pairs(l__settings__115:GetDescendants());
+	while true do
+		local v119, v120 = v116(v117, v118);
+		if v119 then
+
+		else
+			break;
+		end;
+		v118 = v119;
+		if v120.Name == "val" then
+			if not v120:IsA("BoolValue") then
+				if v120:IsA("NumberValue") then
+					if v120.Parent.Name ~= "bool" then
+						if v120.Parent.Name ~= "slider" then
+							l__savesettings__18:FireServer(v120.Parent.Name, v120.Value);
+						end;
+					end;
+				end;
+			elseif v120.Parent.Name ~= "bool" then
+				if v120.Parent.Name ~= "slider" then
+					l__savesettings__18:FireServer(v120.Parent.Name, v120.Value);
+				end;
+			end;
+		end;	
+	end;
+end;
+for v121, v122 in pairs(l__settings__115.buttons:GetChildren()) do
+	if v122:IsA("TextButton") then
+		local v123, v124 = v25.MouseEnterLeaveEvent(v122);
+		v123:Connect(function()
+			if l__settings__115.Visible then
+				l__TweenService__4:Create(v122, u13, {
+					TextTransparency = 0.2, 
+					BackgroundTransparency = 0.7
+				}):Play();
+				l__sfx__20.hover:Play();
+			end;
+		end);
+		v124:Connect(function()
+			if l__settings__115.Visible and selected ~= v122 then
+				l__TweenService__4:Create(v122, u13, {
+					TextTransparency = 0.5, 
+					BackgroundTransparency = 0.95
+				}):Play();
+			end;
+		end);
+		v122.Activated:Connect(function()
+			l__sfx__20.click:Play();
+			if not changingTitle then
+				if v122.Name == "exit" then
+					task.spawn(u16, nil);
+					task.spawn(u17, l__main__15.settings, false);
+					saveSettings();
+					l__sfx__20.bgm.TimePosition = l__sfx__20.bgmsettings.TimePosition + 0.7;
+					l__sfx__20.bgm:Play();
+					l__TweenService__4:Create(l__sfx__20.bgm, TweenInfo.new(0.5, Enum.EasingStyle.Linear), {
+						Volume = 0.4
+					}):Play();
+					l__TweenService__4:Create(l__sfx__20.bgmsettings, TweenInfo.new(0.5, Enum.EasingStyle.Linear), {
+						Volume = 0
+					}):Play();
+					task.wait(0.5);
+					l__sfx__20.bgmsettings:Stop();
+					return;
+				end;
+			else
+				return;
+			end;
+			selected = v122;
+			for v125, v126 in pairs(l__settings__115:GetChildren()) do
+				if v126:IsA("ScrollingFrame") and v126.Name ~= "buttons" then
+					v126.Visible = false;
+				end;
+			end;
+			l__settings__115[v122.Name].Visible = true;
+			for v127, v128 in pairs(l__settings__115.buttons:GetChildren()) do
+				if v128:IsA("TextButton") and v128 ~= selected then
+					l__TweenService__4:Create(v128, u13, {
+						TextTransparency = 0.5, 
+						BackgroundTransparency = 0.95
+					}):Play();
+				end;
+			end;
+		end);
+	end;
+end;
+local l__options__129 = l__LocalPlayer__10:WaitForChild("options", 30);
+for v130, v131 in pairs(l__options__129:GetDescendants()) do
+	while true do
+		wait();
+		if v131 then
+			break;
+		end;	
+	end;
+end;
+local u19 = require(l__ReplicatedStorage__3.module:WaitForChild("settingsModule"));
+function loadSettings()
+	local v132, v133, v134 = pairs(u19);
+	while true do
+		local v135, v136 = v132(v133, v134);
+		if v135 then
+
+		else
+			break;
+		end;
+		v134 = v135;
+		local v137, v138, v139 = pairs(v136);
+		while true do
+			local v140, v141 = v137(v138, v139);
+			if v140 then
+
+			else
+				break;
+			end;
+			v139 = v140;
+			local v142 = typeof(v141.Default);
+			local v143 = nil;
+			if v142 == "boolean" then
+				v143 = l__settings__115.UIPadding.bool:Clone();
+				local l__Value__144 = l__options__129:FindFirstChild(v140, true).Value;
+				v143.val.Value = l__Value__144;
+				if l__Value__144 then
+					local v145 = 0.5;
+				else
+					v145 = 1;
+				end;
+				v143.button.ImageTransparency = v145;
+				v143.button.Activated:Connect(function()
+					l__sfx__20.change:Play();
+					v143.val.Value = not v143.val.Value;
+					if v143.val.Value then
+						local v146 = 0.5;
+					else
+						v146 = 1;
+					end;
+					v143.button.ImageTransparency = v146;
+				end);
+			elseif v142 == "number" then
+				v143 = l__settings__115.UIPadding.slider:Clone();
+				local l__Value__147 = l__options__129:FindFirstChild(v140, true).Value;
+				v143.val.Value = l__Value__147;
+				v143.val:SetAttribute("max", v141.Max);
+				v143.val:SetAttribute("min", v141.Min);
+				local v148 = v141.Max - v141.Min;
+				v143.sliderBounds.drag.Position = UDim2.new((v148 - (v141.Max - l__Value__147)) / v148 * 0.9, 0, 0, 0);
+				v143.sliderBounds.val.Text = l__Value__147;
+				v143.sliderBounds.drag.MouseButton1Down:Connect(function()
+					v143.isDragging.Value = true;
+				end);
+			end;
+			v143.Name = v140;
+			v143.Parent = l__settings__115:FindFirstChild(string.lower(v135));
+			v143.title.Text = v141.Name;
+			v143.desc.Text = "(" .. v141.Desc .. ")";		
+		end;	
+	end;
+end;
+function slider(p9)
+	if p9.isDragging.Value then
+		local v149 = math.clamp((l__UserInputService__2:GetMouseLocation().X - p9.sliderBounds.AbsolutePosition.X) / p9.sliderBounds.AbsoluteSize.X, 0, 1);
+		p9.sliderBounds.drag.Position = UDim2.new(v149 * 0.9, 0, 0, 0);
+		local v150 = p9.val:GetAttribute("max") - p9.val:GetAttribute("min");
+		if 10 < v150 then
+			local v151 = math.floor(p9.val:GetAttribute("min") + v149 * v150);
+		else
+			v151 = math.floor((p9.val:GetAttribute("min") + v149 * v150) * 10) / 10;
+		end;
+		p9.val.Value = v151;
+	end;
+end;
+loadSettings();
+for v152, v153 in pairs(l__settings__115:GetDescendants()) do
+	if v153.Name == "isDragging" then
+		local l__Parent__154 = v153.Parent;
+		l__Parent__154.val.Changed:Connect(function(p10)
+			l__Parent__154.sliderBounds.val.Text = p10;
+			l__sfx__20.typo:Play();
+		end);
+	end;
+end;
+local l__play__155 = l__main__15.play;
+local l__maps__156 = l__play__155.maps;
+mapDesc = {
+	mall = "an abandoned mall with a large parking lot; was also known as \"nico's mall\"", 
+	russia = "the outskirts of a small, quiet russian town; but you don't quite feel alone", 
+	practice = "no bots, all maps; practice your movement skills, socialize, and explore new areas", 
+	voice = "no bots, free points; mess with game objects and go crazy; was also known as \"nico's playground\""
+};
+mapDisplays = {
+	mall = { "rbxassetid://10893545520", "rbxassetid://10893545426" }, 
+	russia = { "rbxassetid://10893545330", "rbxassetid://10893545180" }, 
+	practice = { "rbxassetid://10893545520", "rbxassetid://10893545426" }, 
+	voice = { "rbxassetid://10893545330", "rbxassetid://10893545180" }
+};
+function codeText(p11)
+	script.Parent.codeText.TextColor3 = evalCS(p11.UIGradient.Color, 1);
+	script.Parent.codeText.Text = "loading map: " .. p11.text.Text .. "\n code_name = " .. p11.Name .. "\n map_desc: " .. mapDesc[p11.Name] .. "\n map display_one: " .. mapDisplays[p11.Name][1] .. "\n map display_two: " .. mapDisplays[p11.Name][2] .. "\n game: nico's nextbots" .. string.format("\n your ip: %s", (string.format("%i.%i.%i.%i", math.random(0, 255), math.random(255), math.random(255), math.random(255)))) .. "\n connection_point: " .. math.random(100, 999) .. "\n connection_user: " .. l__LocalPlayer__10.UserId .. "\n connection_username: " .. l__LocalPlayer__10.Name .. "\n server_status: successful\n nextbot_status: started\n content-type: application/json\n nico_status: blagle_cronted/true";
+end;
+function evalCS(p12, p13)
+	if p13 == 0 then
+		return p12.Keypoints[1].Value;
+	end;
+	if p13 == 1 then
+		return p12.Keypoints[#p12.Keypoints].Value;
+	end;
+	local v157 = #p12.Keypoints - 1;
+	local v158 = 1 - 1;
+	while true do
+		local v159 = p12.Keypoints[v158];
+		local v160 = p12.Keypoints[v158 + 1];
+		if v159.Time <= p13 then
+			if p13 < v160.Time then
+				local v161 = (p13 - v159.Time) / (v160.Time - v159.Time);
+				return Color3.new((v160.Value.R - v159.Value.R) * v161 + v159.Value.R, (v160.Value.G - v159.Value.G) * v161 + v159.Value.G, (v160.Value.B - v159.Value.B) * v161 + v159.Value.B);
+			end;
+		end;
+		if 0 <= 1 then
+			if v158 < v157 then
+
+			else
+				break;
+			end;
+		elseif v157 < v158 then
+
+		else
+			break;
+		end;
+		v158 = v158 + 1;	
+	end;
+end;
+local u20 = nil;
+local l__display__21 = l__play__155.display;
+function changeMapText(p14, p15, p16)
+	task.spawn(function()
+		local v162 = #p15;
+		local v163 = 1 - 1;
+		while true do
+			if p14.Name == u20.Name then
+
+			else
+				break;
+			end;
+			l__display__21.title.Text = string.sub(p15, 1, v163);
+			task.wait(0.01);
+			if 0 <= 1 then
+				if v163 < v162 then
+
+				else
+					break;
+				end;
+			elseif v162 < v163 then
+
+			else
+				break;
+			end;
+			v163 = v163 + 1;		
+		end;
+		if p14.Name == u20.Name then
+			l__display__21.title.Text = p15;
+		end;
+	end);
+	task.spawn(function()
+		local v164 = false;
+		local v165 = #p16;
+		local v166 = 1 - 2;
+		while true do
+			if p14.Name == u20.Name then
+
+			else
+				break;
+			end;
+			l__display__21.desc.Text = string.sub(p16, 1, v166);
+			task.wait(0.01);
+			if not v164 then
+				l__sfx__20.typo:Play();
+			end;
+			v164 = not v164;
+			if 0 <= 2 then
+				if v166 < v165 then
+
+				else
+					break;
+				end;
+			elseif v165 < v166 then
+
+			else
+				break;
+			end;
+			v166 = v166 + 2;		
+		end;
+		if p14.Name == u20.Name then
+			l__display__21.desc.Text = p16;
+		end;
+	end);
+end;
+function changePlayColors(p17)
+	local v167 = evalCS(p17.UIGradient.Color, 1);
+	l__TweenService__4:Create(l__display__21.gradient, TweenInfo.new(0.5, Enum.EasingStyle.Linear), {
+		ImageColor3 = v167
+	}):Play();
+	l__TweenService__4:Create(l__play__155.gradient, TweenInfo.new(0.5, Enum.EasingStyle.Linear), {
+		ImageColor3 = v167
+	}):Play();
+	local v168, v169, v170 = pairs(script.Parent:GetChildren());
+	while true do
+		local v171, v172 = v168(v169, v170);
+		if v171 then
+
+		else
+			break;
+		end;
+		v170 = v171;
+		if v172.Name == "codeText" then
+			l__TweenService__4:Create(v172, TweenInfo.new(0.5, Enum.EasingStyle.Linear), {
+				TextColor3 = v167
+			}):Play();
+		end;	
+	end;
+end;
+function displayMap(p18)
+	local v173 = "spawn";
+	local v174 = mapDesc[p18.Name];
+	if p18.Name == "voice" then
+		if not l__values__17.servers.vconly.Value then
+			if p18.Name == "practice" then
+				if l__values__17.servers.socialspace.Value then
+					v174 = "return to the main game, where all the stuff is normal again.";
+				end;
+			end;
+		else
+			v174 = "return to the main game, where all the stuff is normal again.";
+		end;
+	elseif p18.Name == "practice" then
+		if l__values__17.servers.socialspace.Value then
+			v174 = "return to the main game, where all the stuff is normal again.";
+		end;
+	end;
+	if not (p18:GetAttribute("MapId") and workspace:FindFirstChild(p18:GetAttribute("MapId")) or (p18.Name == "voice" and l__LocalPlayer__10:GetAttribute("HasVC") or p18.Name == "practice")) then
+		v173 = "locked";
+	elseif p18.Name == "voice" then
+		if not l__LocalPlayer__10:GetAttribute("HasVC") then
+			if p18.Name == "practice" then
+				v173 = "teleport";
+			end;
+		else
+			v173 = "teleport";
+		end;
+	elseif p18.Name == "practice" then
+		v173 = "teleport";
+	end;
+	l__play__155.spawn.Text = v173;
+	l__play__155.spawn.nextbux.Visible = string.sub(v173, 1, 6) == "unlock";
+	if v173 == "locked" then
+		l__play__155.spawn.BackgroundColor3 = Color3.fromRGB(50, 50, 50);
+	elseif v173 == "teleport" then
+		l__play__155.spawn.BackgroundColor3 = Color3.fromRGB(46, 24, 65);
+	else
+		l__play__155.spawn.BackgroundColor3 = Color3.fromRGB(24, 65, 38);
+	end;
+	l__display__21.tv.map.Image = mapDisplays[p18.Name][math.random(2)];
+	l__display__21.tv.static.ImageTransparency = 0;
+	l__TweenService__4:Create(l__display__21.tv.static, TweenInfo.new(1, Enum.EasingStyle.Quint), {
+		ImageTransparency = 0.9
+	}):Play();
+	l__display__21.title.Text = p18.text.Text;
+	changePlayColors(p18);
+	changeMapText(p18, p18.text.Text, v174);
+	codeText(p18);
+end;
+for v175, v176 in pairs(l__maps__156:GetChildren()) do
+	if v176:IsA("ImageButton") then
+		local v177, v178 = v25.MouseEnterLeaveEvent(v176);
+		v177:Connect(function()
+			if l__play__155.Visible and not startedAlready then
+				l__sfx__20.click2:Play();
+				l__sfx__20.hover:Play();
+				l__TweenService__4:Create(v176, u13, {
+					ImageTransparency = 0
+				}):Play();
+				l__TweenService__4:Create(v176.text, u13, {
+					TextTransparency = 0.2, 
+					Size = UDim2.new(1, 0, 0.15, 0)
+				}):Play();
+			end;
+		end);
+		v178:Connect(function()
+			if l__play__155.Visible and not startedAlready then
+				l__TweenService__4:Create(v176, u13, {
+					ImageTransparency = 0.5
+				}):Play();
+				l__TweenService__4:Create(v176.text, u13, {
+					TextTransparency = 0.5, 
+					Size = UDim2.new(1, 0, 0.1, 0)
+				}):Play();
+			end;
+		end);
+		v176.Activated:Connect(function()
+			if l__play__155.Visible and not startedAlready then
+				l__sfx__20.click:Play();
+				l__sfx__20.tv:Play();
+				l__sfx__20.transition:Play();
+				u20 = v176;
+				displayMap(v176);
+			end;
+		end);
+	end;
+end;
+function tvEffects()
+	if l__play__155.Visible then
+		l__display__21.tv.static.Position = UDim2.new(math.random(-100, 0) / 100, 0, 0, 0);
+		if l__display__21.tv.map.ImageTransparency == 0 then
+			l__display__21.tv.map.ImageTransparency = 0.1;
+		else
+			l__display__21.tv.map.ImageTransparency = 0;
+		end;
+		local v179, v180, v181 = pairs(l__maps__156:GetDescendants());
+		while true do
+			local v182, v183 = v179(v180, v181);
+			if v182 then
+
+			else
+				break;
+			end;
+			v181 = v182;
+			if v183.Name == "locked" then
+				if v183.Visible then
+					v183.static.Position = UDim2.new(math.random(-100, 0) / 100, 0, 0, 0);
+					if v183.static.ImageTransparency == 0.5 then
+						v183.static.ImageTransparency = 0.4;
+					else
+						v183.static.ImageTransparency = 0.5;
+					end;
+				end;
+			end;		
+		end;
+	end;
+end;
+task.spawn(function()
+	while task.wait(5) do
+		l__display__21.tv.lines.Position = UDim2.new(0, 0, -0, 0);
+		l__TweenService__4:Create(l__display__21.tv.lines, TweenInfo.new(5, Enum.EasingStyle.Linear), {
+			Position = UDim2.new(0, 0, -1, 0)
+		}):Play();	
+	end;
+end);
+task.spawn(function()
+	while task.wait(7) do
+		l__TweenService__4:Create(l__display__21.tv.map, TweenInfo.new(5, Enum.EasingStyle.Linear), {
+			Position = UDim2.new(0.35, 0, 0.5, 0)
+		}):Play();
+		task.wait(7);
+		l__TweenService__4:Create(l__display__21.tv.map, TweenInfo.new(5, Enum.EasingStyle.Linear), {
+			Position = UDim2.new(0.65, 0, 0.5, 0)
+		}):Play();	
+	end;
+end);
+startedAlready = false;
+local l__shoppurchasebux__22 = l__ReplicatedStorage__3:WaitForChild("events"):WaitForChild("game"):WaitForChild("global"):WaitForChild("shoppurchasebux");
+function startGame()
+	if not startedAlready then
+		if workspace:FindFirstChild(u20.text.Text) or (u20.Name == "voice" and l__LocalPlayer__10:GetAttribute("HasVC") or u20.Name == "practice") then
+			startedAlready = true;
+			l__display__21.desc.Visible = false;
+			l__sfx__20.static:Stop();
+			l__sfx__20.bgm:Stop();
+			l__sfx__20.play:Play();
+			l__sfx__20.menuend:Play();
+			l__TweenService__4:Create(l__black__19.black, TweenInfo.new(2.5, Enum.EasingStyle.Quint, Enum.EasingDirection.In), {
+				BackgroundTransparency = 0
+			}):Play();
+			l__TweenService__4:Create(l__play__155.black, TweenInfo.new(0.75, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+				BackgroundTransparency = 0
+			}):Play();
+			l__TweenService__4:Create(l__play__155.display, TweenInfo.new(1.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+				Position = UDim2.new(0.6, 0, 0.499, 0)
+			}):Play();
+			l__TweenService__4:Create(l__play__155.display, TweenInfo.new(2.5, Enum.EasingStyle.Quint, Enum.EasingDirection.In), {
+				Size = UDim2.new(1.143, 0, 1.571, 0)
+			}):Play();
+			task.wait(1.5);
+			l__sfx__20.ending:Play();
+			task.wait(1.5);
+			l__LocalPlayer__10.ReplicationFocus = nil;
+			l__respawnchar__21:FireServer();
+			l__play__155.Visible = false;
+			l__vhs__6.Visible = false;
+			script.Parent.Enabled = false;
+			l__CurrentCamera__7.CameraType = Enum.CameraType.Custom;
+			l__display__21.desc.Visible = true;
+			l__changezone__22:FireServer(u20.text.Text);
+			local v184, v185, v186 = pairs(game.Lighting:GetChildren());
+			while true do
+				local v187, v188 = v184(v185, v186);
+				if v187 then
+
+				else
+					break;
+				end;
+				v186 = v187;
+				if v188.Name ~= "Atmosphere" then
+					if not v188:IsA("Sky") then
+						if v188.Name ~= "Bloom" then
+							if v188.Name ~= "ColorCorrection" then
+								if v188.Name ~= "DepthOfField" then
+									v188:Destroy();
+								end;
+							end;
+						end;
+					end;
+				end;			
+			end;
+			task.wait(4.25);
+			l__LocalPlayer__10:SetAttribute("InMenu", false);
+			l__SoundService__1.all.ambient.Volume = 1;
+			l__SoundService__1.all.entities.Volume = 1;
+			return;
+		end;
+		if string.sub(l__play__155.spawn.Text, 1, 6) == "unlock" then
+			if l__shoppurchasebux__22:InvokeServer(u20.text.Text, "Map") then
+				changeMapText(l__maps__156:FindFirstChild(string.sub(u20.text.Text, 4)), u20.text.Text, mapDesc[string.sub(u20.text.Text, 4)]);
+				l__sfx__20.unlock:Play();
+				l__sfx__20.cheers:Play();
+				l__sfx__20.purchased:Play();
+				u20.locked.lock.ImageTransparency = 1;
+				u20.locked.lock.unlock.ImageTransparency = 0;
+				u20.locked.static.ImageTransparency = 0.5;
+				l__TweenService__4:Create(u20.locked.lock, TweenInfo.new(2, Enum.EasingStyle.Quint), {
+					Size = UDim2.new(0.5, 0, 0.5, 0)
+				}):Play();
+				l__TweenService__4:Create(u20.locked.lock.unlock, TweenInfo.new(2, Enum.EasingStyle.Quint), {
+					ImageTransparency = 1
+				}):Play();
+				l__TweenService__4:Create(u20.locked.static, TweenInfo.new(2), {
+					ImageTransparency = 1, 
+					BackgroundTransparency = 1
+				}):Play();
+				l__play__155.spawn.nextbux.Visible = false;
+				l__play__155.spawn.Text = "spawn";
+				task.wait(2);
+				u20.locked.Visible = false;
+				return;
+			else
+				l__sfx__20.wrong:Play();
+				l__sfx__20.locked:Play();
+				l__play__155.spawn.BackgroundColor3 = Color3.fromRGB(150, 50, 50);
+				l__play__155.spawn.Rotation = -30;
+				l__TweenService__4:Create(l__play__155.spawn, TweenInfo.new(0.5, Enum.EasingStyle.Elastic), {
+					Rotation = 0
+				}):Play();
+				l__TweenService__4:Create(l__play__155.spawn, TweenInfo.new(0.5), {
+					BackgroundColor3 = Color3.fromRGB(24, 65, 38)
+				}):Play();
+				return;
+			end;
+		else
+			l__sfx__20.wrong:Play();
+			l__sfx__20.locked:Play();
+		end;
+	end;
+end;
+for v189, v190 in pairs(l__play__155:GetChildren()) do
+	if v190:IsA("TextButton") then
+		local v191, v192 = v25.MouseEnterLeaveEvent(v190);
+		v191:Connect(function()
+			if l__play__155.Visible then
+				l__sfx__20.hover:Play();
+				l__TweenService__4:Create(v190, u13, {
+					TextTransparency = 0.2, 
+					BackgroundTransparency = 0.5
+				}):Play();
+			end;
+		end);
+		v192:Connect(function()
+			if l__play__155.Visible then
+				l__TweenService__4:Create(v190, u13, {
+					TextTransparency = 0.4, 
+					BackgroundTransparency = 0.775
+				}):Play();
+			end;
+		end);
+		v190.Activated:Connect(function()
+			l__sfx__20.click:Play();
+			if not changingTitle then
+				if v190.Name ~= "exit" or not (not startedAlready) then
+					startGame();
+					return;
+				end;
+			else
+				return;
+			end;
+			task.spawn(u16, nil);
+			task.spawn(u17, l__main__15.play, false);
+			for v193, v194 in pairs(script.Parent:GetChildren()) do
+				if v194.Name == "codeText" then
+					l__TweenService__4:Create(v194, TweenInfo.new(0.2, Enum.EasingStyle.Linear), {
+						TextTransparency = 1
+					}):Play();
+				end;
+			end;
+		end);
+	end;
+end;
+task.spawn(function()
+	while task.wait(0.8) do
+		if l__play__155.Visible and u20 ~= nil then
+			local v195 = script.Parent.codeText:Clone();
+			v195.TextTransparency = 0.85;
+			v195.Parent = script.Parent;
+			local v196 = l__TweenService__4:Create(v195, TweenInfo.new(2.8, Enum.EasingStyle.Linear), {
+				Position = UDim2.new(0.65, 0, -0.4, 0)
+			});
+			v196:Play();
+			v196.Completed:Connect(function()
+				v195:Destroy();
+				v196:Destroy();
+			end);
+		end;	
+	end;
+end);
+l__display__21.desc.TextSize = math.round(l__display__21.desc.AbsoluteSize.X * 0.0687);
+l__display__21.desc:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
+	l__display__21.desc.TextSize = math.round(l__display__21.desc.AbsoluteSize.X * 0.0687);
+end);
+local l__shopGui__197 = l__main__15.Parent.Parent:WaitForChild("shopGui");
+local l__shopFrame__198 = l__shopGui__197:WaitForChild("shopFrame");
+local l__categories__199 = l__shopFrame__198:WaitForChild("categories");
+local l__display__200 = l__shopFrame__198:WaitForChild("display");
+local l__items__201 = l__shopFrame__198:WaitForChild("items");
+local l__wallet__202 = l__shopFrame__198:WaitForChild("wallet");
+local l__gradient__203 = l__shopFrame__198:WaitForChild("gradient");
+local l__itemShop__204 = l__ReplicatedStorage__3:WaitForChild("shop"):WaitForChild("itemShop");
+l__display__200.desc.TextSize = math.round(l__display__200.desc.AbsoluteSize.X * 0.124);
+l__display__200.desc:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
+	l__display__200.desc.TextSize = math.round(l__display__200.desc.AbsoluteSize.X * 0.124);
+end);
+local l__invFrame__205 = l__shopGui__197:WaitForChild("invFrame");
+local l__display__206 = l__invFrame__205:WaitForChild("display");
+local l__items__207 = l__invFrame__205:WaitForChild("items");
+local l__categories__208 = l__shopFrame__198:WaitForChild("categories");
+local l__gradient__209 = l__invFrame__205:WaitForChild("gradient");
+local l__itemInv__210 = l__ReplicatedStorage__3:WaitForChild("shop"):WaitForChild("itemInv");
+l__display__206.desc.TextSize = math.round(l__display__206.desc.AbsoluteSize.X * 0.124);
+l__display__206.desc:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
+	l__display__206.desc.TextSize = math.round(l__display__206.desc.AbsoluteSize.X * 0.124);
+end);
+local l__shop__211 = l__ReplicatedStorage__3:WaitForChild("shop");
+local l__shopPos__212 = l__shop__211:WaitForChild("room"):WaitForChild("shopPos");
+local l__invPos__213 = l__shop__211:WaitForChild("room"):WaitForChild("invPos");
+local v214 = TweenInfo.new(1, Enum.EasingStyle.Quart, Enum.EasingDirection.Out);
+local v215 = l__shop__211:Clone();
+v215.Parent = workspace;
+shop = false;
+l__display__200.Visible = false;
+local l__viewport__23 = l__ReplicatedStorage__3:WaitForChild("shop"):WaitForChild("viewport");
+local u24 = nil;
+local u25 = nil;
+function addShopItem(p19, p20, p21, p22)
+	local v216 = l__itemShop__204:Clone();
+	local l__button__217 = v216.button;
+	v216.Parent = p19;
+	local v218 = v8.Rarities[1].Color;
+	local v219 = nil;
+	local v220 = v8.Rarities[1];
+	local v221 = p20.Icon or v8[p22 .. "Icon"];
+	local v222 = p20.Price and 0;
+	if v222 == "gamepass" then
+		if v8.Passes[p21] then
+			v222 = v8.Passes[p21].Price and 0;
+			p20 = v8.Passes[p21];
+			p22 = "Passes";
+		end;
+	end;
+	local v223, v224, v225 = pairs(v8.Rarities);
+	while true do
+		local v226, v227 = v223(v224, v225);
+		if v226 then
+
+		else
+			break;
+		end;
+		if v219 then
+			if (v222 and 0) <= (v227.Maximum or math.huge) * 1 then
+				if (v219 and -1) < (v222 and 0) then
+					v219 = (v227.Maximum or math.huge) * 1;
+					v218 = v227.Color;
+				end;
+			end;
+		else
+			v219 = (v227.Maximum or math.huge) * 1;
+			v218 = v227.Color;
+		end;	
+	end;
+	if p22 == "Taunts" then
+		v218 = Color3.fromRGB(75, 56, 115);
+	end;
+	if p20.CustomColor then
+		v218 = p20.CustomColor;
+	end;
+	l__button__217.BackgroundColor3 = v218;
+	v216.Name = p21;
+	if p20.ForceOrder then
+		v216.LayoutOrder = p20.ForceOrder;
+	else
+		v216.LayoutOrder = -v222;
+	end;
+	if v222 then
+		if v222 <= 0 then
+			local v228 = "free";
+		else
+			v228 = "    " .. v26.comma_value(v222) or "???";
+		end;
+	else
+		v228 = "    " .. v26.comma_value(v222) or "???";
+	end;
+	l__button__217:WaitForChild("price").Text = v228;
+	l__button__217:WaitForChild("name").Text = string.lower((p20.Name or (p20.DisplayName or p21)) and "Unnamed");
+	if p19.Name == "taunts" then
+		local v229 = "taunt";
+	elseif p19.Name == "death" then
+		v229 = "voicepack";
+	elseif p19.Name == "passes" then
+		v229 = "gamepass";
+	else
+		v229 = p19.Name;
+	end;
+	l__button__217:WaitForChild("type").Text = v229;
+	l__button__217:WaitForChild("icon").Visible = v221 or true;
+	if v221 then
+		l__button__217.icon.Image = v221;
+		if p22 ~= "Passes" then
+			if p22 == "Bux" then
+				if p22 == "Passes" then
+					v216.LayoutOrder = v216.LayoutOrder + 1000;
+				else
+					v216.LayoutOrder = p20.ForceOrder and 1;
+				end;
+				l__button__217.icon.Size = UDim2.fromScale(0.6, 0.6);
+				l__button__217.icon.Position = UDim2.fromScale(0.5, 0.4);
+			end;
+		else
+			if p22 == "Passes" then
+				v216.LayoutOrder = v216.LayoutOrder + 1000;
+			else
+				v216.LayoutOrder = p20.ForceOrder and 1;
+			end;
+			l__button__217.icon.Size = UDim2.fromScale(0.6, 0.6);
+			l__button__217.icon.Position = UDim2.fromScale(0.5, 0.4);
+		end;
+	end;
+	if v222 then
+		if v222 <= 0 then
+			l__button__217.price.UIPadding.PaddingBottom = UDim.new();
+			l__button__217.price.UIPadding.PaddingLeft = UDim.new();
+			l__button__217.price.UIPadding.PaddingRight = UDim.new();
+			l__button__217.price.UIPadding.PaddingTop = UDim.new();
+			l__button__217.price.nextbux.Visible = false;
+		elseif p20.RobuxPrice then
+			l__button__217.price.nextbux.Visible = false;
+			l__button__217.price.currency.Visible = true;
+			l__button__217.price.TextColor3 = Color3.fromRGB(239, 224, 165);
+		else
+			l__button__217.price.nextbux.Visible = true;
+			l__button__217.price.currency.Visible = false;
+			l__button__217.price.TextColor3 = Color3.fromRGB(96, 218, 134);
+		end;
+	elseif p20.RobuxPrice then
+		l__button__217.price.nextbux.Visible = false;
+		l__button__217.price.currency.Visible = true;
+		l__button__217.price.TextColor3 = Color3.fromRGB(239, 224, 165);
+	else
+		l__button__217.price.nextbux.Visible = true;
+		l__button__217.price.currency.Visible = false;
+		l__button__217.price.TextColor3 = Color3.fromRGB(96, 218, 134);
+	end;
+	if p20.Sound then
+		local v230 = Instance.new("Sound", v216);
+		v230.Volume = 1;
+		if typeof(p20.Sound) == "table" then
+			v230.SoundId = p20.Sound[Random.new():NextInteger(1, #p20.Sound)];
+		elseif typeof(p20.Sound) == "Instance" then
+			v230.SoundId = p20.Sound.SoundId;
+		else
+			v230.SoundId = p20.Sound;
+		end;
+	end;
+	local v231 = nil;
+	if p22 == "Merch" then
+		v231 = l__viewport__23:Clone();
+		v231.Parent = l__button__217;
+		local l__char__232 = v231.char;
+		if p20.ClothingType == "Shirt" then
+			l__char__232.Shirt.ShirtTemplate = p20.AssetId;
+		elseif p20.ClothingType == "Accessory" then
+			local v233, v234, v235 = l__char__232:GetChildren();
+			while true do
+				local v236, v237 = v233(v234, v235);
+				if v236 then
+
+				else
+					break;
+				end;
+				v235 = v236;
+				if v237:IsA("Accessory") then
+					v237:Destroy();
+				end;			
+			end;
+			if string.lower(p21) == "chucklesomemask" then
+				local v238 = l__ReplicatedStorage__3:WaitForChild("items"):WaitForChild("Chucklesome"):Clone();
+				v238.Parent = l__char__232;
+				v238:FindFirstChild("AccessoryWeld", true).Part1 = l__char__232.Head;
+			end;
+		else
+			l__char__232.Pants.PantsTemplate = p20.AssetId;
+			l__char__232:MoveTo(Vector3.new(0, 2, -10));
+		end;
+	end;
+	local v239 = nil;
+	if p22 == "Taunts" then
+		v231 = l__viewport__23:Clone();
+		v231.Parent = l__button__217;
+		local l__char__240 = v231.char;
+		v231.Animation.AnimationId = p20.Animations[Enum.HumanoidRigType.R6];
+		v239 = v231.char.Humanoid:LoadAnimation(v231.Animation);
+		v239:Play();
+		v239.TimePosition = 3;
+		v239:AdjustSpeed(0);
+		v231.animSpeed.Changed:Connect(function(p23)
+			v239:AdjustSpeed(p23);
+		end);
+	end;
+	local v241, v242 = v25.MouseEnterLeaveEvent(l__button__217);
+	v241:Connect(function()
+		if p19.Position == UDim2.new(0, 0, 0, 0) then
+			l__sfx__20.hover:Play();
+			l__TweenService__4:Create(l__button__217, TweenInfo.new(0.2, Enum.EasingStyle.Exponential), {
+				Size = UDim2.new(0.95, 0, 0.95, 0)
+			}):Play();
+			if v231 then
+				if v239 then
+					l__TweenService__4:Create(v231.animSpeed, TweenInfo.new(0.2), {
+						Value = 1
+					}):Play();
+				end;
+			end;
+		end;
+	end);
+	v242:Connect(function()
+		if p19.Position == UDim2.new(0, 0, 0, 0) then
+			l__TweenService__4:Create(l__button__217, TweenInfo.new(0.2, Enum.EasingStyle.Exponential), {
+				Size = UDim2.new(1, 0, 1, 0)
+			}):Play();
+			if v231 then
+				if v239 then
+					l__TweenService__4:Create(v231.animSpeed, TweenInfo.new(0.2), {
+						Value = 0
+					}):Play();
+					v239.TimePosition = 3;
+				end;
+			end;
+		end;
+	end);
+	l__button__217.Activated:Connect(function()
+		u24 = v216;
+		l__sfx__20.click:Play();
+		l__button__217.Size = UDim2.new(0.9, 0, 0.9, 0);
+		l__TweenService__4:Create(l__button__217, TweenInfo.new(0.4, Enum.EasingStyle.Exponential), {
+			Size = UDim2.new(1, 0, 1, 0)
+		}):Play();
+		if p20.Sound then
+			local v243 = v216:FindFirstChildOfClass("Sound");
+			if typeof(p20.Sound) == "table" then
+				v243.SoundId = p20.Sound[Random.new():NextInteger(1, #p20.Sound)];
+			end;
+			if v243 then
+				l__sfx__20.soundPreview.SoundId = v243.SoundId;
+				l__sfx__20.soundPreview.Volume = 0.5;
+				l__sfx__20.soundPreview.TimePosition = 0;
+				l__sfx__20.soundPreview:Play();
+				if not l__sfx__20.shopbgm:GetAttribute("originalVolume") then
+					l__sfx__20.shopbgm:SetAttribute("originalVolume", l__sfx__20.shopbgm.Volume);
+				end;
+				local v244 = l__sfx__20.shopbgm:GetAttribute("originalVolume");
+				l__sfx__20.shopbgm.Volume = 0;
+				l__TweenService__4:Create(l__sfx__20.soundPreview, TweenInfo.new(2, Enum.EasingStyle.Quint, Enum.EasingDirection.In), {
+					Volume = 0
+				}):Play();
+				l__TweenService__4:Create(l__sfx__20.shopbgm, TweenInfo.new(2.5, Enum.EasingStyle.Quint, Enum.EasingDirection.In), {
+					Volume = v244
+				}):Play();
+			end;
+		end;
+		l__display__200.Visible = true;
+		l__display__200.buyQuantity.Text = "1";
+		if p20.Consumable then
+			l__display__200.buy.Size = UDim2.fromScale(0.77, 0.059);
+			l__display__200.buyQuantity.Visible = true;
+		else
+			l__display__200.buy.Size = UDim2.fromScale(1, 0.059);
+			l__display__200.buyQuantity.Visible = false;
+		end;
+		u25 = p20.Description and "sorry Bro, no description provided. :p";
+		if p20.Price then
+			if p20.Price <= 0 then
+				l__display__200.nextbux.Visible = false;
+				l__display__200.currency.Visible = false;
+				l__display__200.price.TextColor3 = Color3.fromRGB(96, 218, 134);
+				l__display__200.oldprice.Visible = false;
+			elseif p20.RobuxPrice then
+				l__display__200.nextbux.Visible = false;
+				l__display__200.currency.Visible = true;
+				l__display__200.price.TextColor3 = Color3.fromRGB(239, 224, 165);
+				l__display__200.desc.Size = UDim2.fromScale(0.95, 0.53);
+				l__display__200.oldprice.Visible = false;
+			else
+				l__display__200.nextbux.Visible = true;
+				l__display__200.currency.Visible = false;
+				l__display__200.price.TextColor3 = Color3.fromRGB(96, 218, 134);
+				l__display__200.oldprice.Visible = l__LocalPlayer__10:GetAttribute("vip");
+				if v222 then
+					if v222 <= 0 then
+						local v245 = "free";
+					else
+						v245 = v26.comma_value(v222) or "???";
+					end;
+				else
+					v245 = v26.comma_value(v222) or "???";
+				end;
+				l__display__200.oldprice.Text = "<s>" .. v245 .. "</s>";
+				if l__LocalPlayer__10:GetAttribute("vip") then
+					local v246 = 0.5;
+				else
+					v246 = 0.53;
+				end;
+				l__display__200.desc.Size = UDim2.fromScale(0.95, v246);
+			end;
+		elseif p20.RobuxPrice then
+			l__display__200.nextbux.Visible = false;
+			l__display__200.currency.Visible = true;
+			l__display__200.price.TextColor3 = Color3.fromRGB(239, 224, 165);
+			l__display__200.desc.Size = UDim2.fromScale(0.95, 0.53);
+			l__display__200.oldprice.Visible = false;
+		else
+			l__display__200.nextbux.Visible = true;
+			l__display__200.currency.Visible = false;
+			l__display__200.price.TextColor3 = Color3.fromRGB(96, 218, 134);
+			l__display__200.oldprice.Visible = l__LocalPlayer__10:GetAttribute("vip");
+			if v222 then
+				if v222 <= 0 then
+					v245 = "free";
+				else
+					v245 = v26.comma_value(v222) or "???";
+				end;
+			else
+				v245 = v26.comma_value(v222) or "???";
+			end;
+			l__display__200.oldprice.Text = "<s>" .. v245 .. "</s>";
+			if l__LocalPlayer__10:GetAttribute("vip") then
+				v246 = 0.5;
+			else
+				v246 = 0.53;
+			end;
+			l__display__200.desc.Size = UDim2.fromScale(0.95, v246);
+		end;
+		l__display__200.desc.Text = u25;
+		if l__LocalPlayer__10:GetAttribute("vip") then
+			if not p20.RobuxPrice then
+				local v247 = math.ceil(v222 * 0.85);
+				if v247 then
+					if v247 <= 0 then
+						local v248 = "free";
+					else
+						v248 = v26.comma_value(v247) or "???";
+					end;
+				else
+					v248 = v26.comma_value(v247) or "???";
+				end;
+				l__display__200:WaitForChild("price").Text = v248;
+			else
+				if v222 then
+					if v222 <= 0 then
+						local v249 = "free";
+					else
+						v249 = v26.comma_value(v222) or "???";
+					end;
+				else
+					v249 = v26.comma_value(v222) or "???";
+				end;
+				l__display__200:WaitForChild("price").Text = v249;
+			end;
+		else
+			if v222 then
+				if v222 <= 0 then
+					v249 = "free";
+				else
+					v249 = v26.comma_value(v222) or "???";
+				end;
+			else
+				v249 = v26.comma_value(v222) or "???";
+			end;
+			l__display__200:WaitForChild("price").Text = v249;
+		end;
+		l__display__200:WaitForChild("title").Text = l__button__217:WaitForChild("name").Text;
+		l__display__200:WaitForChild("item"):WaitForChild("icon").Visible = l__button__217:WaitForChild("icon").Visible or p22 == "Merch";
+		l__display__200:WaitForChild("item"):WaitForChild("icon").Image = p22 == "Merch" and p20.DisplayId or l__button__217:WaitForChild("icon").Image;
+		if not l__display__200.nextbux.Visible then
+			local v250 = l__display__200.currency.Visible and UDim2.fromScale(0.11, 0.429) or UDim2.fromScale(0.02, 0.429);
+		else
+			v250 = UDim2.fromScale(0.11, 0.429) or UDim2.fromScale(0.02, 0.429);
+		end;
+		l__display__200.price.Position = v250;
+		if l__display__200.buy:GetAttribute("name") == p21 then
+			if l__display__200.buy:GetAttribute("type") ~= p22 then
+				l__display__200.desc.MaxVisibleGraphemes = 0;
+				task.spawn(function()
+					local v251 = #u25;
+					local v252 = 1 - 2;
+					while true do
+						if u25 ~= u25 then
+							return;
+						end;
+						l__display__200.desc.MaxVisibleGraphemes = v252;
+						l__sfx__20.typo:Play();
+						task.wait(0.015);
+						if 0 <= 2 then
+							if v252 < v251 then
+
+							else
+								break;
+							end;
+						elseif v251 < v252 then
+
+						else
+							break;
+						end;
+						v252 = v252 + 2;					
+					end;
+					l__display__200.desc.Text = u25;
+					l__display__200.desc.MaxVisibleGraphemes = -1;
+				end);
+			end;
+		else
+			l__display__200.desc.MaxVisibleGraphemes = 0;
+			task.spawn(function()
+				v251 = #u25;
+				v252 = 1 - 2;
+				while true do
+					if u25 ~= u25 then
+						return;
+					end;
+					l__display__200.desc.MaxVisibleGraphemes = v252;
+					l__sfx__20.typo:Play();
+					task.wait(0.015);
+					if 0 <= 2 then
+						if v252 < v251 then
+
+						else
+							break;
+						end;
+					elseif v251 < v252 then
+
+					else
+						break;
+					end;
+					v252 = v252 + 2;				
+				end;
+				l__display__200.desc.Text = u25;
+				l__display__200.desc.MaxVisibleGraphemes = -1;
+			end);
+		end;
+		l__display__200.buy:SetAttribute("name", p21);
+		l__display__200.buy:SetAttribute("type", p22);
+		if l__display__200.item:FindFirstChild("viewport") then
+			l__display__200.item.viewport:Destroy();
+		end;
+		if v231 then
+			if v239 then
+				local v253 = v231:Clone();
+				v253.Parent = l__display__200.item;
+				local v254 = v253.char.Humanoid:LoadAnimation(v253.Animation);
+				v254:Play(0);
+				v254.TimePosition = 3;
+				v254:AdjustSpeed(0);
+			end;
+		end;
+	end);
+end;
+function addInvItem(p24, p25, p26, p27, p28)
+	local v255 = l__itemInv__210:Clone();
+	local l__button__256 = v255.button;
+	v255.Parent = p24;
+	local v257 = v8.Rarities[1].Color;
+	local v258 = p25.Name or (p25.DisplayName or p26);
+	local v259 = p25.Icon or v8[p27 .. "Icon"];
+	local v260 = p25.Price and 0;
+	if v260 == "gamepass" then
+		if v8.Passes[p26] then
+			v260 = v8.Passes[p26].Price and 0;
+			p25 = v8.Passes[p26];
+			p27 = "Passes";
+		end;
+	end;
+	if p25.Sound then
+		local v261 = Instance.new("Sound", v255);
+		v261.Volume = 1;
+		if typeof(p25.Sound) == "table" then
+			v261.SoundId = p25.Sound[Random.new():NextInteger(1, #p25.Sound)];
+		elseif typeof(p25.Sound) == "Instance" then
+			v261.SoundId = p25.Sound.SoundId;
+		else
+			v261.SoundId = p25.Sound;
+		end;
+	end;
+	local v262 = nil;
+	local v263 = v8.Rarities[1];
+	local v264, v265, v266 = pairs(v8.Rarities);
+	while true do
+		local v267, v268 = v264(v265, v266);
+		if v267 then
+
+		else
+			break;
+		end;
+		if v262 then
+			if (v260 and 0) <= (v268.Maximum or math.huge) then
+				if (v262 and -1) < (v260 and 0) then
+					v262 = v268.Maximum or math.huge;
+					v257 = v268.Color;
+					v263 = v268;
+				end;
+			end;
+		else
+			v262 = v268.Maximum or math.huge;
+			v257 = v268.Color;
+			v263 = v268;
+		end;	
+	end;
+	if p27 == "Taunts" then
+		v257 = Color3.fromRGB(75, 56, 115);
+	end;
+	if p25.CustomColor then
+		v257 = p25.CustomColor;
+	end;
+	l__button__256.BackgroundColor3 = v257;
+	v255.Name = p26;
+	v255.LayoutOrder = #v8.Rarities - table.find(v8.Rarities, v263);
+	if 0 < (p28 and 0) then
+		l__button__256:WaitForChild("quantity").Text = "x" .. (p28 and 1);
+	else
+		l__button__256:WaitForChild("quantity").Text = "";
+		l__button__256:WaitForChild("quantity").Visible = false;
+		l__button__256:WaitForChild("type").Position = UDim2.fromScale(0, 0.923);
+		l__button__256:WaitForChild("name").Position = UDim2.fromScale(0, 0.821);
+	end;
+	l__button__256:WaitForChild("name").Text = string.lower(v258 and "Unnamed");
+	if p24.Name == "taunts" then
+		local v269 = "taunt";
+	elseif p24.Name == "death" then
+		v269 = "voicepack";
+	elseif p24.Name == "passes" then
+		v269 = "gamepass";
+	else
+		v269 = p24.Name;
+	end;
+	l__button__256:WaitForChild("type").Text = v269;
+	l__button__256:WaitForChild("icon").Visible = v259 or true;
+	if v259 then
+		l__button__256.icon.Image = v259;
+		if p27 == "Passes" then
+			v255.LayoutOrder = v255.LayoutOrder + 1000;
+			l__button__256.icon.Size = UDim2.fromScale(0.6, 0.6);
+			l__button__256.icon.Position = UDim2.fromScale(0.5, 0.4);
+		end;
+	end;
+	local v270 = nil;
+	local v271 = nil;
+	if p27 == "Taunts" then
+		v271 = l__viewport__23:Clone();
+		v271.Parent = l__button__256;
+		local l__char__272 = v271.char;
+		v271.Animation.AnimationId = p25.Animations[Enum.HumanoidRigType.R6];
+		v270 = v271.char.Humanoid:LoadAnimation(v271.Animation);
+		v270:Play();
+		v270.TimePosition = 3;
+		v270:AdjustSpeed(0);
+		v271.animSpeed.Changed:Connect(function(p29)
+			v270:AdjustSpeed(p29);
+		end);
+	end;
+	local v273, v274 = v25.MouseEnterLeaveEvent(l__button__256);
+	v273:Connect(function()
+		if p24.Position == UDim2.new(0, 0, 0, 0) then
+			l__sfx__20.hover:Play();
+			l__TweenService__4:Create(l__button__256, TweenInfo.new(0.2, Enum.EasingStyle.Exponential), {
+				Size = UDim2.new(0.95, 0, 0.95, 0)
+			}):Play();
+			if v271 then
+				if v270 then
+					l__TweenService__4:Create(v271.animSpeed, TweenInfo.new(0.2), {
+						Value = 1
+					}):Play();
+				end;
+			end;
+		end;
+	end);
+	v274:Connect(function()
+		if p24.Position == UDim2.new(0, 0, 0, 0) then
+			l__TweenService__4:Create(l__button__256, TweenInfo.new(0.2, Enum.EasingStyle.Exponential), {
+				Size = UDim2.new(1, 0, 1, 0)
+			}):Play();
+			if v271 then
+				if v270 then
+					l__TweenService__4:Create(v271.animSpeed, TweenInfo.new(0.2), {
+						Value = 0
+					}):Play();
+					v270.TimePosition = 3;
+				end;
+			end;
+		end;
+	end);
+	l__button__256.Activated:Connect(function()
+		l__display__206.Visible = true;
+		l__sfx__20.click:Play();
+		l__button__256.Size = UDim2.new(0.9, 0, 0.9, 0);
+		l__TweenService__4:Create(l__button__256, TweenInfo.new(0.4, Enum.EasingStyle.Exponential), {
+			Size = UDim2.new(1, 0, 1, 0)
+		}):Play();
+		if p25.Sound then
+			local v275 = v255:FindFirstChildOfClass("Sound");
+			if typeof(p25.Sound) == "table" then
+				v275.SoundId = p25.Sound[Random.new():NextInteger(1, #p25.Sound)];
+			end;
+			if v275 then
+				l__sfx__20.soundPreview.SoundId = v275.SoundId;
+				l__sfx__20.soundPreview.Volume = 0.5;
+				l__sfx__20.soundPreview.TimePosition = 0;
+				l__sfx__20.soundPreview:Play();
+				if not l__sfx__20.shopbgm:GetAttribute("originalVolume") then
+					l__sfx__20.shopbgm:SetAttribute("originalVolume", l__sfx__20.shopbgm.Volume);
+				end;
+				local v276 = l__sfx__20.shopbgm:GetAttribute("originalVolume");
+				l__sfx__20.shopbgm.Volume = 0;
+				l__TweenService__4:Create(l__sfx__20.soundPreview, TweenInfo.new(2, Enum.EasingStyle.Quint, Enum.EasingDirection.In), {
+					Volume = 0
+				}):Play();
+				l__TweenService__4:Create(l__sfx__20.shopbgm, TweenInfo.new(2.5, Enum.EasingStyle.Quint, Enum.EasingDirection.In), {
+					Volume = v276
+				}):Play();
+			end;
+		end;
+		u25 = p25.Description and "sorry Bro, no description provided. :p";
+		l__display__206.desc.Text = u25;
+		l__display__206:WaitForChild("title").Text = string.lower(v258 and "Unnamed");
+		l__display__206:WaitForChild("type").Text = l__button__256:WaitForChild("type").Text;
+		l__display__206:WaitForChild("item"):WaitForChild("icon").Visible = v259 or true;
+		l__display__206:WaitForChild("item"):WaitForChild("icon").Image = l__button__256.icon.Image;
+		l__display__206:WaitForChild("equip").Visible = not p25.NoEquip and p27 ~= "Taunts";
+		if p25.Consumable then
+			local v277 = "in backpack";
+		else
+			v277 = "equip";
+		end;
+		l__display__206:WaitForChild("equip").Text = v277;
+		if l__display__206.equip:GetAttribute("name") == p26 then
+			if l__display__206.equip:GetAttribute("type") ~= p27 then
+				l__display__206.desc.MaxVisibleGraphemes = 0;
+				task.spawn(function()
+					local v278 = #u25;
+					local v279 = 1 - 2;
+					while true do
+						if u25 ~= u25 then
+							return;
+						end;
+						l__display__206.desc.MaxVisibleGraphemes = v279;
+						l__sfx__20.typo:Play();
+						task.wait(0.015);
+						if 0 <= 2 then
+							if v279 < v278 then
+
+							else
+								break;
+							end;
+						elseif v278 < v279 then
+
+						else
+							break;
+						end;
+						v279 = v279 + 2;					
+					end;
+					l__display__206.desc.Text = u25;
+					l__display__206.desc.MaxVisibleGraphemes = -1;
+				end);
+			end;
+		else
+			l__display__206.desc.MaxVisibleGraphemes = 0;
+			task.spawn(function()
+				v278 = #u25;
+				v279 = 1 - 2;
+				while true do
+					if u25 ~= u25 then
+						return;
+					end;
+					l__display__206.desc.MaxVisibleGraphemes = v279;
+					l__sfx__20.typo:Play();
+					task.wait(0.015);
+					if 0 <= 2 then
+						if v279 < v278 then
+
+						else
+							break;
+						end;
+					elseif v278 < v279 then
+
+					else
+						break;
+					end;
+					v279 = v279 + 2;				
+				end;
+				l__display__206.desc.Text = u25;
+				l__display__206.desc.MaxVisibleGraphemes = -1;
+			end);
+		end;
+		l__display__206.equip:SetAttribute("name", p26);
+		l__display__206.equip:SetAttribute("type", p27);
+		if p25.Customizable then
+			local v280 = true;
+		else
+			v280 = p27 == "Taunts";
+		end;
+		l__invFrame__205.settings.Visible = v280;
+		if l__invFrame__205.settings.Visible then
+			if p25.Customizable then
+				l__invFrame__205.settings.color.Visible = p25.Customizable.Color;
+			end;
+		end;
+		if l__display__206.item:FindFirstChild("viewport") then
+			l__display__206.item.viewport:Destroy();
+		end;
+		if v271 then
+			if v270 then
+				local v281 = v271:Clone();
+				v281.Parent = l__display__206.item;
+				local v282 = v281.char.Humanoid:LoadAnimation(v281.Animation);
+				v282:Play(0);
+				v282.TimePosition = 3;
+				v282:AdjustSpeed(0);
+			end;
+		end;
+	end);
+end;
+local l__OwnedItems__26 = l__LocalPlayer__10:WaitForChild("cosmetics", 30):WaitForChild("OwnedItems");
+function showInvItems()
+	local v283, v284, v285 = pairs(l__items__207:GetChildren());
+	while true do
+		local v286, v287 = v283(v284, v285);
+		if v286 then
+
+		else
+			break;
+		end;
+		v285 = v286;
+		local v288, v289, v290 = pairs(v287:GetChildren());
+		while true do
+			local v291, v292 = v288(v289, v290);
+			if v291 then
+
+			else
+				break;
+			end;
+			v290 = v291;
+			if v292:IsA("Frame") then
+				v292:Destroy();
+			end;		
+		end;	
+	end;
+	local v293 = l__HttpService__6:JSONDecode(l__OwnedItems__26.Value ~= "" and l__OwnedItems__26.Value or "{}");
+	if v293.Gear then
+		local l__Gear__294 = v293.Gear;
+		local v295 = nil;
+		local v296 = nil;
+		while true do
+			local v297 = nil;
+			local v298 = nil;
+			v298, v297 = l__Gear__294(v295, v296);
+			if v298 then
+
+			else
+				break;
+			end;
+			v296 = v298;
+			if typeof(v298) == "string" then
+				local v299 = v8.Gear[v298];
+				if v299 then
+					addInvItem(l__items__207.gear, v299, v298, "Gear", v297);
+				end;
+			else
+				local v300 = v8.Gear[v297];
+				if v300 then
+					addInvItem(l__items__207.gear, v300, v297, "Gear", nil);
+				end;
+			end;		
+		end;
+	end;
+	if l__LocalPlayer__10:GetAttribute("betterflashlight") then
+		addInvItem(l__items__207.gear, v8.Gear.BetterFlashlight, "BetterFlashlight", "Better Flashlight", nil);
+	end;
+	if v293.Taunts then
+		local v301, v302, v303 = pairs(v293.Taunts);
+		while true do
+			local v304, v305 = v301(v302, v303);
+			if v304 then
+
+			else
+				break;
+			end;
+			v303 = v304;
+			local v306 = v8.Taunts[v305];
+			if v306 then
+				addInvItem(l__items__207.taunts, v306, v305, "Taunts");
+			end;		
+		end;
+	end;
+end;
+function showShopItems()
+	local v307, v308, v309 = pairs(l__items__201:GetChildren());
+	while true do
+		local v310, v311 = v307(v308, v309);
+		if v310 then
+
+		else
+			break;
+		end;
+		v309 = v310;
+		local v312, v313, v314 = pairs(v311:GetChildren());
+		while true do
+			local v315, v316 = v312(v313, v314);
+			if v315 then
+
+			else
+				break;
+			end;
+			v314 = v315;
+			if v316:IsA("Frame") then
+				v316:Destroy();
+			end;		
+		end;	
+	end;
+	local v317 = l__HttpService__6:JSONDecode(l__OwnedItems__26.Value ~= "" and l__OwnedItems__26.Value or "{}");
+	local v318, v319, v320 = pairs(v8.Gear);
+	while true do
+		local v321, v322 = v318(v319, v320);
+		if v321 then
+
+		else
+			break;
+		end;
+		v320 = v321;
+		addShopItem(l__items__201.gear, v322, v321, "Gear");	
+	end;
+	local v323, v324, v325 = pairs(v8.Passes);
+	while true do
+		local v326, v327 = v323(v324, v325);
+		if v326 then
+
+		else
+			break;
+		end;
+		v325 = v326;
+		addShopItem(l__items__201.passes, v327, v326, "Passes");	
+	end;
+	local v328, v329, v330 = pairs(v8.Bux);
+	while true do
+		local v331, v332 = v328(v329, v330);
+		if v331 then
+
+		else
+			break;
+		end;
+		v330 = v331;
+		addShopItem(l__items__201.bux, v332, v331 .. " nextbux", "Bux");	
+	end;
+	local v333, v334, v335 = pairs(v8.Merch);
+	while true do
+		local v336, v337 = v333(v334, v335);
+		if v336 then
+
+		else
+			break;
+		end;
+		v335 = v336;
+		local v338 = l__ReplicatedStorage__3.shopInfo.merch:FindFirstChild(v336);
+		if v338 then
+			local v339 = l__HttpService__6:JSONDecode(v338.Value);
+			v339.CustomColor = v338:GetAttribute("CustomColor");
+			addShopItem(l__items__201.merch, v339, v336, "Merch");
+		end;	
+	end;
+	local v340, v341, v342 = pairs(v8.Taunts);
+	while true do
+		local v343, v344 = v340(v341, v342);
+		if v343 then
+
+		else
+			break;
+		end;
+		v342 = v343;
+		addShopItem(l__items__201.taunts, v344, v343, "Taunts", v344.Name or (v344.DisplayName or v343));	
+	end;
+end;
+function updateEmoteSlots()
+	local v345 = {};
+	local v346 = l__HttpService__6:JSONDecode(l__OwnedItems__26.Value ~= "" and l__OwnedItems__26.Value or "{}").EquippedTaunts or {};
+	local v347 = nil;
+	local v348 = nil;
+	while true do
+		local v349, v350 = v346(v347, v348);
+		if v349 then
+
+		else
+			break;
+		end;
+		v348 = v349;
+		v345[v349] = v350;	
+	end;
+	local v351, v352, v353 = l__settings__89:WaitForChild("emoteHolder"):WaitForChild("frame"):WaitForChild("tip"):WaitForChild("slots"):GetChildren();
+	while true do
+		local v354, v355 = v351(v352, v353);
+		if v354 then
+
+		else
+			break;
+		end;
+		v353 = v354;
+		if v355:FindFirstChild("button") then
+			local v356 = string.sub(v355.Name, 5);
+			v355.viewport.Visible = false;
+			v355.add.Visible = true;
+			v355.price.Visible = false;
+			if v345[v356] then
+				local v357 = v8.Taunts[v345[v356]];
+				if v357 then
+					v355.viewport.Visible = true;
+					v355.add.Visible = false;
+					v355.price.Visible = true;
+					v355.price.Text = v357.Name or string.lower(v345[v356]);
+				end;
+			end;
+		end;	
+	end;
+end;
+local l__emoteHolder__358 = l__settings__89:WaitForChild("emoteHolder");
+for v359, v360 in l__emoteHolder__358:WaitForChild("frame"):WaitForChild("tip"):WaitForChild("slots")() do
+	if v360:FindFirstChild("button") then
+		local v361, v362 = v25.MouseEnterLeaveEvent(v360.button);
+		v361:Connect(function()
+			if l__emoteHolder__358.Visible then
+				if v360.viewport.Visible then
+					l__TweenService__4:Create(v360.swap, u13, {
+						ImageTransparency = 0.2
+					}):Play();
+				else
+					l__TweenService__4:Create(v360.add, u13, {
+						ImageTransparency = 0.2, 
+						Size = UDim2.fromScale(0.5, 0.5)
+					}):Play();
+				end;
+				l__sfx__20.hover:Play();
+			end;
+		end);
+		v362:Connect(function()
+			l__TweenService__4:Create(v360.add, u13, {
+				ImageTransparency = 0.6, 
+				Size = UDim2.fromScale(0.35, 0.35)
+			}):Play();
+			l__TweenService__4:Create(v360.swap, u13, {
+				ImageTransparency = 1
+			}):Play();
+		end);
+		v360.button.Activated:Connect(function()
+			l__sfx__20.click:Play();
+			if l__ReplicatedStorage__3:WaitForChild("events"):WaitForChild("game"):WaitForChild("global"):WaitForChild("emoteequip"):InvokeServer(l__display__206.equip:GetAttribute("name") and "BillyBounce", (string.sub(v360.Name, 5))) ~= "success" then
+				l__sfx__20.error:Play();
+				return;
+			end;
+			l__sfx__20.pickup:Play();
+			updateEmoteSlots();
+		end);
+	end;
+end;
+local u27 = nil;
+local u28 = TweenInfo.new(0.5, Enum.EasingStyle.Cubic, Enum.EasingDirection.In);
+local l__transition__29 = l__main__15.Parent.transition;
+local l__camPos__30 = l__shop__211:WaitForChild("camPos");
+local l__selectionFrame__31 = l__shopGui__197:WaitForChild("selectionFrame");
+local u32 = TweenInfo.new(0.5, Enum.EasingStyle.Cubic, Enum.EasingDirection.Out);
+function startShop()
+	if not shop then
+		u27 = "selection";
+		shop = true;
+		diffScreen = true;
+		l__sfx__20.swoosh:Play();
+		l__TweenService__4:Create(l__CurrentCamera__7, u28, {
+			CFrame = l__CurrentCamera__7.CFrame * CFrame.Angles(0, -45, 0)
+		}):Play();
+		l__TweenService__4:Create(l__sfx__20.bgm, u28, {
+			Volume = 0
+		}):Play();
+		l__TweenService__4:Create(l__buttons__4, u28, {
+			Position = UDim2.new(-0.5, 0, 0, 0)
+		}):Play();
+		l__TweenService__4:Create(script.Parent.gradient, u28, {
+			Position = UDim2.new(-1, 0, 0, 0)
+		}):Play();
+		l__TweenService__4:Create(l__transition__29, u28, {
+			Position = UDim2.new(0, 0, 0, 0)
+		}):Play();
+		l__TweenService__4:Create(l__title__13, u28, {
+			Position = UDim2.new(-0.5, 0, 0, 0)
+		}):Play();
+		createKeeperChar();
+		task.wait(0.5);
+		local v363, v364, v365 = pairs(l__vhs__6:GetChildren());
+		while true do
+			local v366, v367 = v363(v364, v365);
+			if v366 then
+
+			else
+				break;
+			end;
+			v365 = v366;
+			if v367:IsA("ImageLabel") then
+				v367:SetAttribute("originalTransparency", v367.ImageTransparency);
+				v367.ImageTransparency = v367.ImageTransparency + (1 - v367.ImageTransparency) * 0.5;
+			end;		
+		end;
+		l__CurrentCamera__7.FieldOfView = 50;
+		l__sfx__20.bgm:Pause();
+		l__sfx__20.woosh:Play();
+		game.Lighting:WaitForChild("vhs").Enabled = false;
+		l__LocalPlayer__10.ReplicationFocus = l__camPos__30;
+		l__CurrentCamera__7.CFrame = l__camPos__30.CFrame * CFrame.Angles(0, 45, 0);
+		l__title__13.Position = UDim2.new(1, 0, 0, 0);
+		l__selectionFrame__31.Position = UDim2.fromScale(0.5, 1.5);
+		l__shopFrame__198.Position = UDim2.fromScale(-1.5, 0.585);
+		l__invFrame__205.Position = UDim2.fromScale(1.5, 0.585);
+		l__TweenService__4:Create(l__title__13, u32, {
+			Position = UDim2.new(0, 0, 0, 0)
+		}):Play();
+		l__TweenService__4:Create(l__CurrentCamera__7, u32, {
+			CFrame = l__camPos__30.CFrame
+		}):Play();
+		l__TweenService__4:Create(l__transition__29, u32, {
+			Position = UDim2.new(-1.25, 0, 0, 0)
+		}):Play();
+		l__TweenService__4:Create(l__selectionFrame__31, u32, {
+			Position = UDim2.new(0.5, 0, 0.5, 0)
+		}):Play();
+		l__shopGui__197.Enabled = true;
+		l__sfx__20.shopbgm:Resume();
+		l__TweenService__4:Create(l__sfx__20.shopbgm, u28, {
+			Volume = 0.7
+		}):Play();
+		task.wait(0.5);
+	end;
+end;
+function leaveShop()
+	if shop then
+		l__sfx__20.swoosh:Play();
+		l__TweenService__4:Create(l__CurrentCamera__7, u28, {
+			CFrame = l__CurrentCamera__7.CFrame * CFrame.Angles(0, 45, 0)
+		}):Play();
+		l__TweenService__4:Create(l__title__13, u28, {
+			Position = UDim2.new(1, 0, 0, 0)
+		}):Play();
+		l__TweenService__4:Create(l__transition__29, u28, {
+			Position = UDim2.new(0, 0, 0, 0)
+		}):Play();
+		if u27 == "shop" then
+			l__TweenService__4:Create(l__shopFrame__198, u28, {
+				Position = UDim2.new(1.5, 0, 0.585, 0)
+			}):Play();
+		end;
+		if u27 == "inv" then
+			l__TweenService__4:Create(l__invFrame__205, u28, {
+				Position = UDim2.new(1.5, 0, 0.585, 0)
+			}):Play();
+		end;
+		if u27 == "selection" then
+			l__TweenService__4:Create(l__selectionFrame__31, u28, {
+				Position = UDim2.new(1.5, 0, 0.5, 0)
+			}):Play();
+		end;
+		l__TweenService__4:Create(l__sfx__20.shopbgm, u28, {
+			Volume = 0
+		}):Play();
+		task.wait(0.5);
+		local v368, v369, v370 = pairs(l__vhs__6:GetChildren());
+		while true do
+			local v371, v372 = v368(v369, v370);
+			if v371 then
+
+			else
+				break;
+			end;
+			v370 = v371;
+			if v372:IsA("ImageLabel") then
+				v372.ImageTransparency = v372:GetAttribute("originalTransparency");
+			end;		
+		end;
+		l__CurrentCamera__7.FieldOfView = 45;
+		l__sfx__20.shopbgm:Pause();
+		l__sfx__20.shopbell:Play();
+		l__sfx__20.woosh:Play();
+		game.Lighting:WaitForChild("vhs").Enabled = true;
+		local v373 = game.ReplicatedStorage:FindFirstChild(l__LocalPlayer__10.Team.Name);
+		if not v373:FindFirstChild("cams") then
+			v373 = game.ReplicatedStorage.nn_mall;
+		end;
+		local v374 = v373.cams:GetChildren();
+		local v375 = v374[math.random(#v374)];
+		l__LocalPlayer__10.ReplicationFocus = v375;
+		l__CurrentCamera__7.CFrame = v375.CFrame * CFrame.Angles(0, -45, 0);
+		l__title__13.Position = UDim2.new(-1, 0, 0, 0);
+		l__TweenService__4:Create(l__sfx__20.bgm, TweenInfo.new(0.5), {
+			Volume = 0.4
+		}):Play();
+		l__TweenService__4:Create(l__buttons__4, u32, {
+			Position = UDim2.new(0, 0, 0, 0)
+		}):Play();
+		l__TweenService__4:Create(script.Parent.gradient, u28, {
+			Position = UDim2.new(0, 0, 0, 0)
+		}):Play();
+		l__TweenService__4:Create(l__transition__29, u32, {
+			Position = UDim2.new(1.25, 0, 0, 0)
+		}):Play();
+		l__TweenService__4:Create(l__title__13, u32, {
+			Position = UDim2.new(0, 0, 0, 0)
+		}):Play();
+		l__TweenService__4:Create(l__CurrentCamera__7, u32, {
+			CFrame = v375.CFrame
+		}):Play();
+		l__shopGui__197.Enabled = false;
+		l__sfx__20.bgm:Resume();
+		task.wait(0.5);
+		u27 = nil;
+		shop = false;
+		diffScreen = false;
+		task.spawn(u16, nil);
+	end;
+end;
+local u33 = TweenInfo.new(0.25);
+function shopHover(p30)
+	if not p30:IsA("TextLabel") then
+		if p30:IsA("TextButton") then
+			l__TweenService__4:Create(p30, u33, {
+				BackgroundTransparency = 0.5, 
+				TextTransparency = 0.2
+			}):Play();
+		end;
+	else
+		l__TweenService__4:Create(p30, u33, {
+			BackgroundTransparency = 0.5, 
+			TextTransparency = 0.2
+		}):Play();
+	end;
+end;
+function shopLeave(p31)
+	if not p31:IsA("TextLabel") then
+		if p31:IsA("TextButton") then
+			l__TweenService__4:Create(p31, u33, {
+				BackgroundTransparency = 0.75, 
+				TextTransparency = 0.4
+			}):Play();
+		end;
+	else
+		l__TweenService__4:Create(p31, u33, {
+			BackgroundTransparency = 0.75, 
+			TextTransparency = 0.4
+		}):Play();
+	end;
+end;
+local l__chatbox__376 = l__shopGui__197:WaitForChild("talk"):WaitForChild("chatbox");
+local l__face__377 = l__chatbox__376:WaitForChild("face");
+local l__title__378 = l__chatbox__376:WaitForChild("title");
+local l__text__379 = l__chatbox__376:WaitForChild("text");
+local l__face_shadow__380 = l__chatbox__376:WaitForChild("face_shadow");
+local l__title_shadow__381 = l__chatbox__376:WaitForChild("title_shadow");
+local l__text_shadow__34 = l__chatbox__376:WaitForChild("text_shadow");
+l__text__379:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
+	l__text__379.TextSize = l__text__379.AbsoluteSize.X * 0.0573;
+	l__text_shadow__34.TextSize = l__text__379.AbsoluteSize.X * 0.0573;
+end);
+local v382 = {
+	nico = {
+		Name = "nicopatty", 
+		FaceId = "rbxassetid://11365861211", 
+		VoiceId = "rbxassetid://11120360671", 
+		Volume = 0.3, 
+		Color = Color3.fromRGB(92, 255, 157)
+	}, 
+	cootie = {
+		Name = "cootie", 
+		FaceId = "rbxassetid://11373216083", 
+		VoiceId = "rbxassetid://11373219804", 
+		Volume = 0.6, 
+		Color = Color3.fromRGB(138, 83, 255)
+	}, 
+	holi = {
+		Name = "holidae", 
+		FaceId = "rbxassetid://11388454094", 
+		VoiceId = "rbxassetid://11388457074", 
+		Volume = 0.5, 
+		Color = Color3.fromRGB(255, 83, 86)
+	}, 
+	jasper = {
+		Name = "jasper", 
+		FaceId = "rbxassetid://11388741789", 
+		VoiceId = "rbxassetid://11388647610", 
+		Volume = 1.75, 
+		Color = Color3.fromRGB(0, 251, 255)
+	}, 
+	riker = {
+		Name = "riker", 
+		FaceId = "rbxassetid://11414740223", 
+		VoiceId = "rbxassetid://11414746381", 
+		Volume = 0.5, 
+		Color = Color3.fromRGB(9, 137, 207)
+	}, 
+	nicolai = {
+		Name = "nicolai", 
+		FaceId = "rbxassetid://11414740491", 
+		VoiceId = "rbxassetid://11414746665", 
+		Volume = 0.5, 
+		Color = Color3.fromRGB(230, 1, 47)
+	}, 
+	unknown = {
+		FaceId = "rbxassetid://11172003495", 
+		VoiceId = "rbxassetid://464049227", 
+		Volume = 0.5, 
+		Color = Color3.fromRGB(155, 155, 155)
+	}
+};
+l__text__379:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
+	l__text__379.TextSize = l__text__379.AbsoluteSize.X * 0.0573;
+	l__text_shadow__34.TextSize = l__text__379.AbsoluteSize.X * 0.0573;
+end);
+local u35 = "";
+function openChat()
+	local v383 = v382[u35] or v382.unknown;
+	l__text__379.Text = "";
+	l__text_shadow__34.Text = "";
+	l__title__378.Text = v383.Name or u35;
+	l__title_shadow__381.Text = v383.Name or u35;
+	l__face__377.Image = v383.FaceId;
+	l__face_shadow__380.Image = v383.FaceId;
+	l__chatbox__376.gradient.ImageColor3 = v383.Color;
+	l__chatbox__376.title.UIGradient.Color = ColorSequence.new({ ColorSequenceKeypoint.new(0, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1, v383.Color) });
+	l__sfx__20.open:Play();
+	l__chatbox__376.Size = UDim2.new(1, 0, 0, 0);
+	local v384, v385, v386 = pairs(l__chatbox__376:GetChildren());
+	while true do
+		local v387, v388 = v384(v385, v386);
+		if v387 then
+
+		else
+			break;
+		end;
+		v386 = v387;
+		if v388.Name ~= "gradient" then
+			if v388:IsA("ImageLabel") then
+				v388.ImageTransparency = 1;
+			elseif v388:IsA("TextLabel") then
+				v388.TextTransparency = 1;
+			end;
+		end;	
+	end;
+	l__chatbox__376.Visible = true;
+	l__TweenService__4:Create(l__chatbox__376, TweenInfo.new(0.25, Enum.EasingStyle.Quart), {
+		Size = UDim2.new(1, 0, 1, 0)
+	}):Play();
+	task.wait(0.25);
+	local v389, v390, v391 = pairs(l__chatbox__376:GetChildren());
+	while true do
+		local v392, v393 = v389(v390, v391);
+		if v392 then
+
+		else
+			break;
+		end;
+		v391 = v392;
+		if v393.Name ~= "gradient" then
+			if v393:IsA("ImageLabel") then
+				if string.find(v393.Name, "shadow") then
+					l__TweenService__4:Create(v393, TweenInfo.new(0.1), {
+						ImageTransparency = 0.5
+					}):Play();
+				else
+					l__TweenService__4:Create(v393, TweenInfo.new(0.1), {
+						ImageTransparency = 0
+					}):Play();
+				end;
+			elseif v393:IsA("TextLabel") then
+				if string.find(v393.Name, "shadow") then
+					l__TweenService__4:Create(v393, TweenInfo.new(0.1), {
+						TextTransparency = 0.5
+					}):Play();
+				else
+					l__TweenService__4:Create(v393, TweenInfo.new(0.1), {
+						TextTransparency = 0
+					}):Play();
+				end;
+			end;
+		end;	
+	end;
+	task.wait(0.1);
+end;
+function closeChat()
+	l__sfx__20.close:Play();
+	local v394, v395, v396 = pairs(l__chatbox__376:GetChildren());
+	while true do
+		local v397, v398 = v394(v395, v396);
+		if v397 then
+
+		else
+			break;
+		end;
+		v396 = v397;
+		if v398.Name ~= "gradient" then
+			if v398:IsA("ImageLabel") then
+				l__TweenService__4:Create(v398, TweenInfo.new(0.1), {
+					ImageTransparency = 1
+				}):Play();
+			elseif v398:IsA("TextLabel") then
+				l__TweenService__4:Create(v398, TweenInfo.new(0.1), {
+					TextTransparency = 1
+				}):Play();
+			end;
+		end;	
+	end;
+	task.wait(0.1);
+	l__TweenService__4:Create(l__chatbox__376, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
+		Size = UDim2.new(1, 0, 0, 0)
+	}):Play();
+	task.wait(0.25);
+	l__chatbox__376.Visible = false;
+end;
+local u36 = {
+	a = 1, 
+	b = 2, 
+	c = 3, 
+	d = 4, 
+	e = 5, 
+	f = 6, 
+	g = 7, 
+	h = 8, 
+	i = 9, 
+	j = 10, 
+	k = 11, 
+	l = 12, 
+	m = 13, 
+	n = 14, 
+	o = 15, 
+	p = 16, 
+	q = 17, 
+	r = 18, 
+	s = 19, 
+	t = 20, 
+	u = 21, 
+	v = 22, 
+	w = 23, 
+	x = 24, 
+	y = 25, 
+	z = 26, 
+	["1"] = 1, 
+	["2"] = 2, 
+	["3"] = 3, 
+	["4"] = 4, 
+	["5"] = 5, 
+	["6"] = 6, 
+	["7"] = 7, 
+	["8"] = 8, 
+	["9"] = 9
+};
+local l__voice__37 = l__sfx__20.voice;
+function generateBlip(p32, p33)
+	if u36[string.lower(p32)] then
+
+	else
+		if p32 == "#" then
+			local v399 = l__voice__37:Clone();
+			v399.SoundId = "rbxassetid://468911141";
+			v399.TimePosition = math.random(200, 400) / 100;
+			v399.Parent = l__sfx__20;
+			v399.Volume = 0.3;
+			v399:Play();
+			task.wait(0.08);
+			v399:Stop();
+			v399:Destroy();
+		end;
+		return;
+	end;
+	local v400 = u36[string.lower(p32)];
+	local v401 = l__voice__37:Clone();
+	v401.Parent = l__sfx__20;
+	if 12 < l__voice__37.TimeLength then
+		v401.TimePosition = (v400 - 1) / 2;
+	end;
+	v401.Volume = 0;
+	v401:Play();
+	l__TweenService__4:Create(v401, TweenInfo.new(0.02), {
+		Volume = p33
+	}):Play();
+	task.wait(0.032);
+	l__TweenService__4:Create(v401, TweenInfo.new(0.02), {
+		Volume = 0
+	}):Play();
+	task.wait(0.05);
+	v401:Stop();
+	v401:Destroy();
+end;
+currentChatMessage = "";
+function chat(p34)
+	local v402 = v382[u35] or v382.unknown;
+	currentChatMessage = p34;
+	l__text__379.Text = "";
+	l__text_shadow__34.Text = "";
+	local v403 = -1;
+	local v404 = {};
+	while true do
+		if v403 ~= nil then
+
+		else
+			break;
+		end;
+		v403 = string.find(p34, "?", v403 + 1);
+		if v403 ~= nil then
+			table.insert(v404, v403);
+		end;	
+	end;
+	local v405 = -1;
+	local v406 = {};
+	while true do
+		if v405 ~= nil then
+
+		else
+			break;
+		end;
+		v405 = string.find(p34, "%.", v405 + 1);
+		if v405 ~= nil then
+			table.insert(v406, v405);
+		end;	
+	end;
+	local v407 = {};
+	local v408, v409, v410 = ipairs(v404);
+	while true do
+		v408(v409, v410);
+		if v408 then
+
+		else
+			break;
+		end;
+		v410 = v408;
+		v407[v409 - 1] = 0.25;
+		v407[v409 - 2] = 0.2;
+		v407[v409 - 3] = 0.15;
+		v407[v409 - 4] = 0.1;
+		v407[v409 - 5] = 0.05;
+		v407[v409 - 6] = 0;	
+	end;
+	local v411, v412, v413 = ipairs(v406);
+	while true do
+		v411(v412, v413);
+		if v411 then
+
+		else
+			break;
+		end;
+		v413 = v411;
+		v407[v412 - 1] = -0.0625;
+		v407[v412 - 2] = -0.05;
+		v407[v412 - 3] = -0.0375;
+		v407[v412 - 4] = -0.025;
+		v407[v412 - 5] = -0.0125;
+		v407[v412 - 6] = -0;	
+	end;
+	local v414 = 1;
+	l__voice__37.SoundId = v402.VoiceId;
+	l__text__379.Text = p34;
+	l__text_shadow__34.Text = p34;
+	local v415 = 200;
+	if #p34 < v415 then
+		v415 = #p34;
+	end;
+	local v416 = 1 - 1;
+	while true do
+		if currentChatMessage ~= p34 then
+			return;
+		end;
+		local v417 = string.sub(p34, v416, v416);
+		l__text__379.MaxVisibleGraphemes = v416;
+		l__text_shadow__34.MaxVisibleGraphemes = v416;
+		local v418 = math.random(-2, 2);
+		l__face__377.Rotation = v418;
+		l__face_shadow__380.Rotation = v418;
+		if v417 == " " then
+			v414 = Random.new():NextInteger(975, 1025) / 1000;
+		end;
+		if typeof(v407[v416]) == "number" then
+			l__voice__37.PlaybackSpeed = v414 + v407[v416];
+		else
+			l__voice__37.PlaybackSpeed = v414;
+		end;
+		task.spawn(generateBlip, v417, v402.Volume);
+		local v419 = 0.02;
+		if v417 ~= "." then
+			if v417 ~= "?" then
+				if v417 ~= "!" then
+					if v417 == "," then
+						v419 = 0.2;
+					end;
+				else
+					v419 = 0.2;
+				end;
+			else
+				v419 = 0.2;
+			end;
+		else
+			v419 = 0.2;
+		end;
+		task.wait(v419);
+		if 0 <= 1 then
+			if v416 < v415 then
+
+			else
+				break;
+			end;
+		elseif v415 < v416 then
+
+		else
+			break;
+		end;
+		v416 = v416 + 1;	
+	end;
+	l__face__377.Rotation = 0;
+	l__face_shadow__380.Rotation = 0;
+end;
+local u38 = l__items__201.gear;
+function shopChangeScreen(p35)
+	if l__items__201:FindFirstChild(p35) then
+		if not l__categories__199:FindFirstChild(p35) then
+			if p35 == "bux" then
+				if p35 ~= "bux" then
+					if l__categories__199:FindFirstChild(p35):FindFirstChild("comingsoon") then
+						if not l__categories__199:FindFirstChild(p35):FindFirstChild("comingsoon").Visible then
+							l__sfx__20.transition:Play();
+							l__sfx__20.buyclose:Play();
+							if u38 then
+								if u38.Name ~= p35 then
+									local v420, v421, v422 = pairs(l__items__201:GetChildren());
+									while true do
+										local v423, v424 = v420(v421, v422);
+										if v423 then
+
+										else
+											break;
+										end;
+										v422 = v423;
+										if v424:IsA("ScrollingFrame") then
+											if v424 ~= l__items__201:FindFirstChild(p35) then
+												v424.Position = UDim2.fromScale(0, 0);
+												local v425 = l__TweenService__4:Create(v424, TweenInfo.new(0.5, Enum.EasingStyle.Exponential), {
+													Position = UDim2.fromScale(-1, 0)
+												});
+												v425:Play();
+												v425.Completed:Connect(function()
+													if u38 == l__items__201:FindFirstChild(p35) then
+														v424.Visible = false;
+													end;
+												end);
+											else
+												v424.Visible = true;
+												v424.Position = UDim2.fromScale(1, 0);
+												l__TweenService__4:Create(v424, TweenInfo.new(0.5, Enum.EasingStyle.Exponential), {
+													Position = UDim2.fromScale(0, 0)
+												}):Play();
+											end;
+										end;									
+									end;
+								end;
+							end;
+							u38 = l__items__201:FindFirstChild(p35);
+							if u38 then
+								l__TweenService__4:Create(l__gradient__203, u33, {
+									ImageColor3 = u38.BackgroundColor3
+								}):Play();
+								return;
+							end;
+						else
+							l__sfx__20.error:Play();
+						end;
+					else
+						l__sfx__20.transition:Play();
+						l__sfx__20.buyclose:Play();
+						if u38 then
+							if u38.Name ~= p35 then
+								v420, v421, v422 = pairs(l__items__201:GetChildren());
+								while true do
+									v423, v424 = v420(v421, v422);
+									if v423 then
+
+									else
+										break;
+									end;
+									v422 = v423;
+									if v424:IsA("ScrollingFrame") then
+										if v424 ~= l__items__201:FindFirstChild(p35) then
+											v424.Position = UDim2.fromScale(0, 0);
+											v425 = l__TweenService__4:Create(v424, TweenInfo.new(0.5, Enum.EasingStyle.Exponential), {
+												Position = UDim2.fromScale(-1, 0)
+											});
+											v425:Play();
+											v425.Completed:Connect(function()
+												if u38 == l__items__201:FindFirstChild(p35) then
+													v424.Visible = false;
+												end;
+											end);
+										else
+											v424.Visible = true;
+											v424.Position = UDim2.fromScale(1, 0);
+											l__TweenService__4:Create(v424, TweenInfo.new(0.5, Enum.EasingStyle.Exponential), {
+												Position = UDim2.fromScale(0, 0)
+											}):Play();
+										end;
+									end;								
+								end;
+							end;
+						end;
+						u38 = l__items__201:FindFirstChild(p35);
+						if u38 then
+							l__TweenService__4:Create(l__gradient__203, u33, {
+								ImageColor3 = u38.BackgroundColor3
+							}):Play();
+							return;
+						end;
+					end;
+				else
+					l__sfx__20.transition:Play();
+					l__sfx__20.buyclose:Play();
+					if u38 then
+						if u38.Name ~= p35 then
+							v420, v421, v422 = pairs(l__items__201:GetChildren());
+							while true do
+								v423, v424 = v420(v421, v422);
+								if v423 then
+
+								else
+									break;
+								end;
+								v422 = v423;
+								if v424:IsA("ScrollingFrame") then
+									if v424 ~= l__items__201:FindFirstChild(p35) then
+										v424.Position = UDim2.fromScale(0, 0);
+										v425 = l__TweenService__4:Create(v424, TweenInfo.new(0.5, Enum.EasingStyle.Exponential), {
+											Position = UDim2.fromScale(-1, 0)
+										});
+										v425:Play();
+										v425.Completed:Connect(function()
+											if u38 == l__items__201:FindFirstChild(p35) then
+												v424.Visible = false;
+											end;
+										end);
+									else
+										v424.Visible = true;
+										v424.Position = UDim2.fromScale(1, 0);
+										l__TweenService__4:Create(v424, TweenInfo.new(0.5, Enum.EasingStyle.Exponential), {
+											Position = UDim2.fromScale(0, 0)
+										}):Play();
+									end;
+								end;							
+							end;
+						end;
+					end;
+					u38 = l__items__201:FindFirstChild(p35);
+					if u38 then
+						l__TweenService__4:Create(l__gradient__203, u33, {
+							ImageColor3 = u38.BackgroundColor3
+						}):Play();
+						return;
+					end;
+				end;
+			end;
+		elseif p35 ~= "bux" then
+			if l__categories__199:FindFirstChild(p35):FindFirstChild("comingsoon") then
+				if not l__categories__199:FindFirstChild(p35):FindFirstChild("comingsoon").Visible then
+					l__sfx__20.transition:Play();
+					l__sfx__20.buyclose:Play();
+					if u38 then
+						if u38.Name ~= p35 then
+							v420, v421, v422 = pairs(l__items__201:GetChildren());
+							while true do
+								v423, v424 = v420(v421, v422);
+								if v423 then
+
+								else
+									break;
+								end;
+								v422 = v423;
+								if v424:IsA("ScrollingFrame") then
+									if v424 ~= l__items__201:FindFirstChild(p35) then
+										v424.Position = UDim2.fromScale(0, 0);
+										v425 = l__TweenService__4:Create(v424, TweenInfo.new(0.5, Enum.EasingStyle.Exponential), {
+											Position = UDim2.fromScale(-1, 0)
+										});
+										v425:Play();
+										v425.Completed:Connect(function()
+											if u38 == l__items__201:FindFirstChild(p35) then
+												v424.Visible = false;
+											end;
+										end);
+									else
+										v424.Visible = true;
+										v424.Position = UDim2.fromScale(1, 0);
+										l__TweenService__4:Create(v424, TweenInfo.new(0.5, Enum.EasingStyle.Exponential), {
+											Position = UDim2.fromScale(0, 0)
+										}):Play();
+									end;
+								end;							
+							end;
+						end;
+					end;
+					u38 = l__items__201:FindFirstChild(p35);
+					if u38 then
+						l__TweenService__4:Create(l__gradient__203, u33, {
+							ImageColor3 = u38.BackgroundColor3
+						}):Play();
+						return;
+					end;
+				else
+					l__sfx__20.error:Play();
+				end;
+			else
+				l__sfx__20.transition:Play();
+				l__sfx__20.buyclose:Play();
+				if u38 then
+					if u38.Name ~= p35 then
+						v420, v421, v422 = pairs(l__items__201:GetChildren());
+						while true do
+							v423, v424 = v420(v421, v422);
+							if v423 then
+
+							else
+								break;
+							end;
+							v422 = v423;
+							if v424:IsA("ScrollingFrame") then
+								if v424 ~= l__items__201:FindFirstChild(p35) then
+									v424.Position = UDim2.fromScale(0, 0);
+									v425 = l__TweenService__4:Create(v424, TweenInfo.new(0.5, Enum.EasingStyle.Exponential), {
+										Position = UDim2.fromScale(-1, 0)
+									});
+									v425:Play();
+									v425.Completed:Connect(function()
+										if u38 == l__items__201:FindFirstChild(p35) then
+											v424.Visible = false;
+										end;
+									end);
+								else
+									v424.Visible = true;
+									v424.Position = UDim2.fromScale(1, 0);
+									l__TweenService__4:Create(v424, TweenInfo.new(0.5, Enum.EasingStyle.Exponential), {
+										Position = UDim2.fromScale(0, 0)
+									}):Play();
+								end;
+							end;						
+						end;
+					end;
+				end;
+				u38 = l__items__201:FindFirstChild(p35);
+				if u38 then
+					l__TweenService__4:Create(l__gradient__203, u33, {
+						ImageColor3 = u38.BackgroundColor3
+					}):Play();
+					return;
+				end;
+			end;
+		else
+			l__sfx__20.transition:Play();
+			l__sfx__20.buyclose:Play();
+			if u38 then
+				if u38.Name ~= p35 then
+					v420, v421, v422 = pairs(l__items__201:GetChildren());
+					while true do
+						v423, v424 = v420(v421, v422);
+						if v423 then
+
+						else
+							break;
+						end;
+						v422 = v423;
+						if v424:IsA("ScrollingFrame") then
+							if v424 ~= l__items__201:FindFirstChild(p35) then
+								v424.Position = UDim2.fromScale(0, 0);
+								v425 = l__TweenService__4:Create(v424, TweenInfo.new(0.5, Enum.EasingStyle.Exponential), {
+									Position = UDim2.fromScale(-1, 0)
+								});
+								v425:Play();
+								v425.Completed:Connect(function()
+									if u38 == l__items__201:FindFirstChild(p35) then
+										v424.Visible = false;
+									end;
+								end);
+							else
+								v424.Visible = true;
+								v424.Position = UDim2.fromScale(1, 0);
+								l__TweenService__4:Create(v424, TweenInfo.new(0.5, Enum.EasingStyle.Exponential), {
+									Position = UDim2.fromScale(0, 0)
+								}):Play();
+							end;
+						end;					
+					end;
+				end;
+			end;
+			u38 = l__items__201:FindFirstChild(p35);
+			if u38 then
+				l__TweenService__4:Create(l__gradient__203, u33, {
+					ImageColor3 = u38.BackgroundColor3
+				}):Play();
+				return;
+			end;
+		end;
+	end;
+end;
+local u39 = l__items__207.gear;
+function invChangeScreen(p36)
+	if l__items__207:FindFirstChild(p36) then
+		if not l__categories__208:FindFirstChild(p36) then
+			if p36 == "bux" then
+				if p36 ~= "bux" then
+					if l__categories__208:FindFirstChild(p36):FindFirstChild("comingsoon") then
+						if not l__categories__208:FindFirstChild(p36):FindFirstChild("comingsoon").Visible then
+							l__sfx__20.transition:Play();
+							if u39.Name ~= p36 then
+								local v426, v427, v428 = pairs(l__items__207:GetChildren());
+								while true do
+									local v429, v430 = v426(v427, v428);
+									if v429 then
+
+									else
+										break;
+									end;
+									v428 = v429;
+									if v430:IsA("ScrollingFrame") then
+										if v430 ~= l__items__207:FindFirstChild(p36) then
+											v430.Position = UDim2.fromScale(0, 0);
+											local v431 = l__TweenService__4:Create(v430, TweenInfo.new(0.15), {
+												Position = UDim2.fromScale(-1, 0)
+											});
+											v431:Play();
+											v431.Completed:Connect(function()
+												v430.Visible = false;
+											end);
+										else
+											v430.Visible = true;
+											v430.Position = UDim2.fromScale(1, 0);
+											l__TweenService__4:Create(v430, TweenInfo.new(0.15), {
+												Position = UDim2.fromScale(0, 0)
+											}):Play();
+										end;
+									end;								
+								end;
+							end;
+							u39 = l__items__207:FindFirstChild(p36);
+							if u39 then
+								l__TweenService__4:Create(l__gradient__209, u33, {
+									ImageColor3 = u39.BackgroundColor3
+								}):Play();
+								if u39.Name ~= "gear" then
+									l__color__90.Visible = false;
+									l__settings__89.Visible = false;
+								end;
+								if u39.Name == "taunts" then
+									l__emoteHolder__358.Visible = true;
+									l__settings__89.Visible = true;
+									updateEmoteSlots();
+									return;
+								else
+									l__emoteHolder__358.Visible = false;
+									l__settings__89.Visible = false;
+									return;
+								end;
+							end;
+						else
+							l__sfx__20.error:Play();
+						end;
+					else
+						l__sfx__20.transition:Play();
+						if u39.Name ~= p36 then
+							v426, v427, v428 = pairs(l__items__207:GetChildren());
+							while true do
+								v429, v430 = v426(v427, v428);
+								if v429 then
+
+								else
+									break;
+								end;
+								v428 = v429;
+								if v430:IsA("ScrollingFrame") then
+									if v430 ~= l__items__207:FindFirstChild(p36) then
+										v430.Position = UDim2.fromScale(0, 0);
+										v431 = l__TweenService__4:Create(v430, TweenInfo.new(0.15), {
+											Position = UDim2.fromScale(-1, 0)
+										});
+										v431:Play();
+										v431.Completed:Connect(function()
+											v430.Visible = false;
+										end);
+									else
+										v430.Visible = true;
+										v430.Position = UDim2.fromScale(1, 0);
+										l__TweenService__4:Create(v430, TweenInfo.new(0.15), {
+											Position = UDim2.fromScale(0, 0)
+										}):Play();
+									end;
+								end;							
+							end;
+						end;
+						u39 = l__items__207:FindFirstChild(p36);
+						if u39 then
+							l__TweenService__4:Create(l__gradient__209, u33, {
+								ImageColor3 = u39.BackgroundColor3
+							}):Play();
+							if u39.Name ~= "gear" then
+								l__color__90.Visible = false;
+								l__settings__89.Visible = false;
+							end;
+							if u39.Name == "taunts" then
+								l__emoteHolder__358.Visible = true;
+								l__settings__89.Visible = true;
+								updateEmoteSlots();
+								return;
+							else
+								l__emoteHolder__358.Visible = false;
+								l__settings__89.Visible = false;
+								return;
+							end;
+						end;
+					end;
+				else
+					l__sfx__20.transition:Play();
+					if u39.Name ~= p36 then
+						v426, v427, v428 = pairs(l__items__207:GetChildren());
+						while true do
+							v429, v430 = v426(v427, v428);
+							if v429 then
+
+							else
+								break;
+							end;
+							v428 = v429;
+							if v430:IsA("ScrollingFrame") then
+								if v430 ~= l__items__207:FindFirstChild(p36) then
+									v430.Position = UDim2.fromScale(0, 0);
+									v431 = l__TweenService__4:Create(v430, TweenInfo.new(0.15), {
+										Position = UDim2.fromScale(-1, 0)
+									});
+									v431:Play();
+									v431.Completed:Connect(function()
+										v430.Visible = false;
+									end);
+								else
+									v430.Visible = true;
+									v430.Position = UDim2.fromScale(1, 0);
+									l__TweenService__4:Create(v430, TweenInfo.new(0.15), {
+										Position = UDim2.fromScale(0, 0)
+									}):Play();
+								end;
+							end;						
+						end;
+					end;
+					u39 = l__items__207:FindFirstChild(p36);
+					if u39 then
+						l__TweenService__4:Create(l__gradient__209, u33, {
+							ImageColor3 = u39.BackgroundColor3
+						}):Play();
+						if u39.Name ~= "gear" then
+							l__color__90.Visible = false;
+							l__settings__89.Visible = false;
+						end;
+						if u39.Name == "taunts" then
+							l__emoteHolder__358.Visible = true;
+							l__settings__89.Visible = true;
+							updateEmoteSlots();
+							return;
+						else
+							l__emoteHolder__358.Visible = false;
+							l__settings__89.Visible = false;
+							return;
+						end;
+					end;
+				end;
+			end;
+		elseif p36 ~= "bux" then
+			if l__categories__208:FindFirstChild(p36):FindFirstChild("comingsoon") then
+				if not l__categories__208:FindFirstChild(p36):FindFirstChild("comingsoon").Visible then
+					l__sfx__20.transition:Play();
+					if u39.Name ~= p36 then
+						v426, v427, v428 = pairs(l__items__207:GetChildren());
+						while true do
+							v429, v430 = v426(v427, v428);
+							if v429 then
+
+							else
+								break;
+							end;
+							v428 = v429;
+							if v430:IsA("ScrollingFrame") then
+								if v430 ~= l__items__207:FindFirstChild(p36) then
+									v430.Position = UDim2.fromScale(0, 0);
+									v431 = l__TweenService__4:Create(v430, TweenInfo.new(0.15), {
+										Position = UDim2.fromScale(-1, 0)
+									});
+									v431:Play();
+									v431.Completed:Connect(function()
+										v430.Visible = false;
+									end);
+								else
+									v430.Visible = true;
+									v430.Position = UDim2.fromScale(1, 0);
+									l__TweenService__4:Create(v430, TweenInfo.new(0.15), {
+										Position = UDim2.fromScale(0, 0)
+									}):Play();
+								end;
+							end;						
+						end;
+					end;
+					u39 = l__items__207:FindFirstChild(p36);
+					if u39 then
+						l__TweenService__4:Create(l__gradient__209, u33, {
+							ImageColor3 = u39.BackgroundColor3
+						}):Play();
+						if u39.Name ~= "gear" then
+							l__color__90.Visible = false;
+							l__settings__89.Visible = false;
+						end;
+						if u39.Name == "taunts" then
+							l__emoteHolder__358.Visible = true;
+							l__settings__89.Visible = true;
+							updateEmoteSlots();
+							return;
+						else
+							l__emoteHolder__358.Visible = false;
+							l__settings__89.Visible = false;
+							return;
+						end;
+					end;
+				else
+					l__sfx__20.error:Play();
+				end;
+			else
+				l__sfx__20.transition:Play();
+				if u39.Name ~= p36 then
+					v426, v427, v428 = pairs(l__items__207:GetChildren());
+					while true do
+						v429, v430 = v426(v427, v428);
+						if v429 then
+
+						else
+							break;
+						end;
+						v428 = v429;
+						if v430:IsA("ScrollingFrame") then
+							if v430 ~= l__items__207:FindFirstChild(p36) then
+								v430.Position = UDim2.fromScale(0, 0);
+								v431 = l__TweenService__4:Create(v430, TweenInfo.new(0.15), {
+									Position = UDim2.fromScale(-1, 0)
+								});
+								v431:Play();
+								v431.Completed:Connect(function()
+									v430.Visible = false;
+								end);
+							else
+								v430.Visible = true;
+								v430.Position = UDim2.fromScale(1, 0);
+								l__TweenService__4:Create(v430, TweenInfo.new(0.15), {
+									Position = UDim2.fromScale(0, 0)
+								}):Play();
+							end;
+						end;					
+					end;
+				end;
+				u39 = l__items__207:FindFirstChild(p36);
+				if u39 then
+					l__TweenService__4:Create(l__gradient__209, u33, {
+						ImageColor3 = u39.BackgroundColor3
+					}):Play();
+					if u39.Name ~= "gear" then
+						l__color__90.Visible = false;
+						l__settings__89.Visible = false;
+					end;
+					if u39.Name == "taunts" then
+						l__emoteHolder__358.Visible = true;
+						l__settings__89.Visible = true;
+						updateEmoteSlots();
+						return;
+					else
+						l__emoteHolder__358.Visible = false;
+						l__settings__89.Visible = false;
+						return;
+					end;
+				end;
+			end;
+		else
+			l__sfx__20.transition:Play();
+			if u39.Name ~= p36 then
+				v426, v427, v428 = pairs(l__items__207:GetChildren());
+				while true do
+					v429, v430 = v426(v427, v428);
+					if v429 then
+
+					else
+						break;
+					end;
+					v428 = v429;
+					if v430:IsA("ScrollingFrame") then
+						if v430 ~= l__items__207:FindFirstChild(p36) then
+							v430.Position = UDim2.fromScale(0, 0);
+							v431 = l__TweenService__4:Create(v430, TweenInfo.new(0.15), {
+								Position = UDim2.fromScale(-1, 0)
+							});
+							v431:Play();
+							v431.Completed:Connect(function()
+								v430.Visible = false;
+							end);
+						else
+							v430.Visible = true;
+							v430.Position = UDim2.fromScale(1, 0);
+							l__TweenService__4:Create(v430, TweenInfo.new(0.15), {
+								Position = UDim2.fromScale(0, 0)
+							}):Play();
+						end;
+					end;				
+				end;
+			end;
+			u39 = l__items__207:FindFirstChild(p36);
+			if u39 then
+				l__TweenService__4:Create(l__gradient__209, u33, {
+					ImageColor3 = u39.BackgroundColor3
+				}):Play();
+				if u39.Name ~= "gear" then
+					l__color__90.Visible = false;
+					l__settings__89.Visible = false;
+				end;
+				if u39.Name == "taunts" then
+					l__emoteHolder__358.Visible = true;
+					l__settings__89.Visible = true;
+					updateEmoteSlots();
+					return;
+				else
+					l__emoteHolder__358.Visible = false;
+					l__settings__89.Visible = false;
+					return;
+				end;
+			end;
+		end;
+	end;
+end;
+local u40 = {
+	nico = {
+		welcome = { "hi", "welcome dude", "buy some things", "what's Up", "make it fast my shift ends in 5 minutes", "how's ur day", "the customer before u reeked lol anyways hi", "don't buy from any other person they secretly increase their prices", "good morning", "buy something cool", "this is my first day be nice to me", "kamusta!!", "hello" }, 
+		buy = { "thanks", "hope u like it bro", "good choice", "that all for today?", "would you like to tip 15, 20, or 25 percent?", "ty for shopping", "appreciate it", "have a nice day", "i'm not one to judge someone's purchases but im judging sooooo hard jk", "u thought i was feeling u? that nextbot a munch", "salamat po", "salmaaaat", "errorHandler: exception found - errors.shop.nico.buyMessage.PleaseHELP ME NOW SlenderMan is Coming for me HeFortnite Battlepass new" }
+	}, 
+	cootie = {
+		welcome = { "hi it me cootie" }, 
+		buy = { "hm thank u yes" }
+	}, 
+	holi = {
+		welcome = { "hi", "welcome dude", "buy some things" }, 
+		buy = { "thanks", "hope u like it bro", "good choice", "that all for today?", "would you like to tip 15, 20, or 25 percent?", "ty for shopping" }
+	}, 
+	jasper = {
+		welcome = { "sup dude", "yoyoyo", "yo we got like items n stuff", "welcome in", "good to see you", "have u seen that weird mug", "sup bro", "give me your money", "haven't i seen you before?" }, 
+		buy = { "muchas gracias", "thank you very much", "you will not regret that", "would you like fries with that", "would you like a bag", "much love", "you clicked that button so good", "bye bye money", "i would've bought that too!", "because 7 ate 9!", "anything else you wanna check out?", "im gonna pretend you tipped me", "you seen that nico guy? he like makes nextbots or something", "they're in the walls", "i know two nico's. it's weird.", "buyMessage. yes, this is intentional. thank you very much.", "tyty", "i get paid minimum wage to watch you spend money", "hey i kinda wanted that", "did you know nico makes BANGER music?", "you > everyone else", "thank you so much <3", "you really bought that in front of the guy behind you?", "ok now go get killed by some nextbots", "i dont make commissions but thanks lol", "nico was never real. it's jasper's jokebots now.", "i nico da nextbots" }
+	}, 
+	riker = {
+		welcome = { "you have seconds", "you have days", "you have minutes", "hello", "im selling things", "buy something", "yo", "heya", "give me money", "welcome to the shop", "my butt is glued here help", "buy my stuff", "also try untitled tag game", "also try meme regime", "i\204\180\204\146\204\174m\204\181\204\134\204\165 \204\183\204\130\204\163c\204\180\204\144\205\153o\204\181\204\129\204\157m\204\182\204\134\204\172i\204\182\205\138\204\159n\204\180\205\130\204\168g\204\183\204\133\204\156", "i dont really know how you got here cuz like, theres only a void outside that door but ok, thats fine i guess", "you better have money", "help", "where did you come from? no like actually, theres nothing out there except void, i wasn't looking and then boom you were there" }, 
+		buy = { "theres a face on the walls", "yea... good luck with that", "ok good", "thank god", "you should buy more", "lock your doors", "about time", "would you like fries with that?", "######################################################################################################################", "hope that works", "i don't know what you just bought, i can't actually see what it was.", "my shirt has hospitalized 7 people", "[CONTENT DELETED]", "[ERROR DISPLAYING RIKER_BUYMESSAGE_9]", "aww, i was gonna eat that", "im being watched", "when am i being paid", "i hate my job", "hit me up if you also want a map optimized", "help", "i am glued here", "i'll sell some more stuff soon", "how does selling dances work? do i just like, teach you or something?" }
+	}, 
+	nicolai = {
+		welcome = { "hi", "welcome dude", "buy some things", "velkommen!", "what are you doing in my house" }, 
+		buy = { "its really good. trust me bro", "thanks", "hope u like it bro", "good choice", "that all for today?", "would you like to tip 15, 20, or 25 percent?", "ty for shopping" }
+	}, 
+	uglyburger0 = {
+		welcome = { "ayo", "hello citizen", "come right up! get some goodies", "i just finished my lunch break", "welcome back", "hows your day/afternoon/evening/night been??", "i just got here, what's my line again?", "do you have a charger on you? my phones at 5%", "*applause sfx*", "i can't stop hiccuping help" }, 
+		buy = { "thanks dude", "we got plenty more where that came from", "whaat!!! awesome!", "this. is. awesome", "epic", "as my family once told me: thanks", "hmmmmmmmm... good choice", "i just discovered what life really means thanks to you", "whoa!", "aww so thoughtful", "this is awesome. hey after you're done, hop on 3008 wink wink", "good choice!", "awesome sauce", "bingo", "that's the way the cookie crumbles" }
+	}, 
+	wal00g = {
+		welcome = { "whats up bro", "33", "yo", "the sky rains flesh and blood for our sins", "the LOSER convention is down the hall, LOSER", "i dont like your shirt", "that jasper guy am i right", "argh argh argh", "what is your favorite dinosaur", "if you dont buy something im sending you to the pit", "john smith for the win", "did you hear the one about the oranges", "im like the grinch if... never mind", "vote me for president of the world", "john smith will pull out the springs one by one", "how do you judge your choices as ethical", "hello friend", "if an action is morally wrong what stops us from doing it", "how shall we comfort ourselves, the murderers of all murderers", "have you been hydrating", "its me john smith", "we are friends now", "\240\159\166\149", "between me and you i dont like jasper", "it was this or the dennys", "eliminate the penny", "things have learnt to walk that ought to crawl", "only needing an hour of sleep is objectively better than being able to eat whatever you want and get perfect nutrition. it isnt even close. you can EAT PERFECTLY NORMALLY, but you cannot get by with only an hour of sleep normally" }, 
+		buy = { "another sacrifice for the econ goblin", "i do indeed love money", "thats not going to charity", "here you are, exchanging money for goods or services", "money makes the world go round", "you should buy more", "i dont accept change", "that makes you look cool. buy more", "measure your worth by your posessions" }
+	}, 
+	unknown = {
+		welcome = { "hi" }, 
+		buy = { "thanks" }
+	}
+};
+local function v432(p37)
+	l__sfx__20.woosh:Play();
+	l__TweenService__4:Create(l__selectionFrame__31, u28, {
+		Position = UDim2.fromScale(0.5, 1.5)
+	}):Play();
+	if p37 == "inventory" then
+		showInvItems();
+		u27 = "inv";
+		l__CurrentCamera__7.CFrame = l__camPos__30.CFrame;
+		l__TweenService__4:Create(l__CurrentCamera__7, v214, {
+			CFrame = l__invPos__213.CFrame, 
+			FieldOfView = 35
+		}):Play();
+		task.spawn(u16, "inventory", 0.8);
+		task.wait(0.25);
+		l__TweenService__4:Create(l__invFrame__205, u32, {
+			Position = UDim2.fromScale(0.65, 0.585)
+		}):Play();
+		return;
+	end;
+	if p37 == "shop" then
+		showShopItems();
+		l__sfx__20.shopbell:Play();
+		u27 = "shop";
+		l__CurrentCamera__7.CFrame = l__camPos__30.CFrame;
+		l__TweenService__4:Create(l__CurrentCamera__7, v214, {
+			CFrame = l__shopPos__212.CFrame, 
+			FieldOfView = 35
+		}):Play();
+		task.spawn(u16, "shop", 0.8);
+		task.wait(0.25);
+		l__TweenService__4:Create(l__shopFrame__198, u32, {
+			Position = UDim2.fromScale(0.35, 0.585)
+		}):Play();
+		task.wait(0.5);
+		openChat();
+		local l__welcome__433 = u40[u35].welcome;
+		chat(l__welcome__433[Random.new():NextInteger(1, #l__welcome__433)]);
+	end;
+end;
+local function v434()
+	l__sfx__20.transition:Play();
+	l__sfx__20.woosh:Play();
+	game.Lighting:WaitForChild("vhs").Enabled = false;
+	l__LocalPlayer__10.ReplicationFocus = l__camPos__30;
+	if u27 == "shop" then
+		l__TweenService__4:Create(l__shopFrame__198, u28, {
+			Position = UDim2.new(-1.5, 0, 0.585, 0)
+		}):Play();
+	end;
+	if u27 == "inv" then
+		l__TweenService__4:Create(l__invFrame__205, u28, {
+			Position = UDim2.new(1.5, 0, 0.585, 0)
+		}):Play();
+	end;
+	u27 = "selection";
+	task.spawn(u16, nil);
+	l__TweenService__4:Create(l__CurrentCamera__7, v214, {
+		CFrame = l__camPos__30.CFrame, 
+		FieldOfView = 50
+	}):Play();
+	closeChat();
+	task.wait(0.25);
+	l__TweenService__4:Create(l__selectionFrame__31, u32, {
+		Position = UDim2.new(0.5, 0, 0.5, 0)
+	}):Play();
+	l__shopGui__197.Enabled = true;
+end;
+function purchaseAnim(p38, p39)
+	l__sfx__20.purchased:Play();
+	l__sfx__20.cashreg:Play();
+	l__sfx__20.boom:Play();
+	local v435 = l__shopFrame__198.items:FindFirstChild(p38, true);
+	if v435 then
+		if not v435.button:GetAttribute("originalColor") then
+			v435.button:SetAttribute("originalColor", v435.button.BackgroundColor3);
+		end;
+		v435.button.BackgroundColor3 = Color3.new(1, 1, 1);
+		v435.button.BackgroundTransparency = 0.3;
+		v435.button.Size = UDim2.new(0.9, 0.9, 0.9);
+		local v436 = Random.new():NextInteger(0, 1) == 1;
+		if v436 then
+			local v437 = 10;
+		else
+			v437 = -10;
+		end;
+		v435.button.Rotation = v437;
+		if v436 then
+			local v438 = 10;
+		else
+			v438 = -10;
+		end;
+		l__display__200.buy.Rotation = v438;
+		l__TweenService__4:Create(v435.button, TweenInfo.new(0.5), {
+			BackgroundColor3 = v435.button:GetAttribute("originalColor"), 
+			BackgroundTransparency = 0.6
+		}):Play();
+		l__TweenService__4:Create(v435.button, TweenInfo.new(1, Enum.EasingStyle.Elastic), {
+			Size = UDim2.new(1, 1, 1), 
+			Rotation = 0
+		}):Play();
+		l__TweenService__4:Create(l__display__200.buy, TweenInfo.new(1, Enum.EasingStyle.Elastic), {
+			Rotation = 0
+		}):Play();
+	end;
+	local l__buy__439 = u40[u35].buy;
+	chat(l__buy__439[Random.new():NextInteger(1, #l__buy__439)]);
+end;
+local l__passpurchase__41 = l__ReplicatedStorage__3:WaitForChild("events"):WaitForChild("game"):WaitForChild("global"):WaitForChild("passpurchase");
+local l__merchpurchase__42 = l__ReplicatedStorage__3:WaitForChild("events"):WaitForChild("game"):WaitForChild("global"):WaitForChild("merchpurchase");
+local l__shoppurchase__43 = l__ReplicatedStorage__3:WaitForChild("events"):WaitForChild("game"):WaitForChild("global"):WaitForChild("shoppurchase");
+local l__shoppurchasebux__44 = l__ReplicatedStorage__3:WaitForChild("events"):WaitForChild("game"):WaitForChild("global"):WaitForChild("shoppurchasebux");
+local function v440()
+	local v441 = l__display__200.buy:GetAttribute("name");
+	local v442 = l__display__200.buy:GetAttribute("type");
+	if v442 == "Bux" then
+		v441 = tonumber(string.match(v441, "%d+"));
+	end;
+	if v441 and v442 then
+		local v443 = v8[v442] and v8[v442][v441];
+		if v443 then
+			if v442 == "Passes" then
+				if l__passpurchase__41:InvokeServer(v443.GamepassId) == "success" then
+					purchaseAnim(v441, v442);
+					showInvItems();
+					return;
+				else
+					l__sfx__20.error:Play();
+					return;
+				end;
+			end;
+			if v442 == "Merch" then
+				if l__merchpurchase__42:InvokeServer(v443.ClothingId) == "success" then
+					purchaseAnim(v441, v442);
+					showInvItems();
+					return;
+				else
+					l__sfx__20.error:Play();
+					return;
+				end;
+			end;
+			if v442 == "Bux" then
+				if l__shoppurchase__43:InvokeServer(v443.ProductId) == "success" then
+					purchaseAnim(v441, v442);
+					return;
+				else
+					l__sfx__20.error:Play();
+					return;
+				end;
+			end;
+			if l__shoppurchasebux__44:InvokeServer(v441, v442, math.clamp(tonumber(l__display__200.buyQuantity.Text) and 1, 1, math.huge)) == "success" then
+				purchaseAnim(v441, v442);
+				if u24 and not v443.Consumable then
+					u24.BackgroundColor3 = Color3.new(0.5, 0.5, 0.5);
+					return;
+				end;
+			else
+				l__sfx__20.error:Play();
+			end;
+		end;
+	end;
+end;
+shopFunctions = {};
+for v444, v445 in pairs(l__shopGui__197:GetDescendants()) do
+	if not v445:IsA("TextButton") and (v445.Name ~= "bux" or not v445:IsA("ImageButton")) then
+		if v445:IsA("ImageButton") and l__selectionFrame__31:IsAncestorOf(v445) and v445.Name ~= "drag" then
+			local v446, v447 = v25.MouseEnterLeaveEvent(v445);
+			v446:Connect(function()
+				if l__shopGui__197.Enabled then
+					if l__selectionFrame__31:IsAncestorOf(v445) then
+						v445:SetAttribute("OgRot", v445:GetAttribute("OgRot") or v445.Rotation);
+						l__TweenService__4:Create(v445, u32, {
+							Rotation = v445:GetAttribute("OgRot") * 3, 
+							Position = v445.Name == "shop" and UDim2.fromScale(1.04, 0.02) or (v445.Name == "inventory" and UDim2.fromScale(-0.04, -0.02) or v445.Position)
+						}):Play();
+					end;
+					l__sfx__20.hover:Play();
+					shopHover(v445);
+				end;
+			end);
+			v447:Connect(function()
+				if l__shopGui__197.Enabled then
+					l__TweenService__4:Create(v445, u32, {
+						Rotation = v445:GetAttribute("OgRot") and 0, 
+						Position = v445.Name == "shop" and UDim2.fromScale(1.01, 0.01) or (v445.Name == "inventory" and UDim2.fromScale(-0.01, -0.01) or v445.Position)
+					}):Play();
+					shopLeave(v445);
+				end;
+			end);
+			v445.Activated:Connect(function()
+				l__sfx__20.click:Play();
+				if l__shopGui__197.Enabled and v445.Name ~= "return" and v445.Name ~= "buy" and v445.Name ~= "equip" then
+					if u27 == "selection" then
+						v432(v445.Name);
+						return;
+					end;
+					if u27 == "shop" then
+						shopChangeScreen(v445.Name);
+						return;
+					end;
+					if u27 == "inv" then
+						invChangeScreen(v445.Name);
+						return;
+					end;
+				else
+					if v445.Name == "return" and l__selectionFrame__31:IsAncestorOf(v445) then
+						leaveShop();
+						return;
+					end;
+					if v445.Name == "return" and not l__selectionFrame__31:IsAncestorOf(v445) then
+						v434();
+						return;
+					end;
+					if v445.Name == "buy" then
+						v440();
+						return;
+					end;
+					if v445.Name == "equip" and l__display__206.equip:GetAttribute("name") and l__display__206.equip:GetAttribute("type") then
+
+					end;
+				end;
+			end);
+		end;
+	elseif v445.Name ~= "drag" then
+		v446, v447 = v25.MouseEnterLeaveEvent(v445);
+		v446:Connect(function()
+			if l__shopGui__197.Enabled then
+				if l__selectionFrame__31:IsAncestorOf(v445) then
+					v445:SetAttribute("OgRot", v445:GetAttribute("OgRot") or v445.Rotation);
+					l__TweenService__4:Create(v445, u32, {
+						Rotation = v445:GetAttribute("OgRot") * 3, 
+						Position = v445.Name == "shop" and UDim2.fromScale(1.04, 0.02) or (v445.Name == "inventory" and UDim2.fromScale(-0.04, -0.02) or v445.Position)
+					}):Play();
+				end;
+				l__sfx__20.hover:Play();
+				shopHover(v445);
+			end;
+		end);
+		v447:Connect(function()
+			if l__shopGui__197.Enabled then
+				l__TweenService__4:Create(v445, u32, {
+					Rotation = v445:GetAttribute("OgRot") and 0, 
+					Position = v445.Name == "shop" and UDim2.fromScale(1.01, 0.01) or (v445.Name == "inventory" and UDim2.fromScale(-0.01, -0.01) or v445.Position)
+				}):Play();
+				shopLeave(v445);
+			end;
+		end);
+		v445.Activated:Connect(function()
+			l__sfx__20.click:Play();
+			if l__shopGui__197.Enabled and v445.Name ~= "return" and v445.Name ~= "buy" and v445.Name ~= "equip" then
+				if u27 == "selection" then
+					v432(v445.Name);
+					return;
+				end;
+				if u27 == "shop" then
+					shopChangeScreen(v445.Name);
+					return;
+				end;
+				if u27 == "inv" then
+					invChangeScreen(v445.Name);
+					return;
+				end;
+			else
+				if v445.Name == "return" and l__selectionFrame__31:IsAncestorOf(v445) then
+					leaveShop();
+					return;
+				end;
+				if v445.Name == "return" and not l__selectionFrame__31:IsAncestorOf(v445) then
+					v434();
+					return;
+				end;
+				if v445.Name == "buy" then
+					v440();
+					return;
+				end;
+				if v445.Name == "equip" and l__display__206.equip:GetAttribute("name") and l__display__206.equip:GetAttribute("type") then
+
+				end;
+			end;
+		end);
+	end;
+end;
+l__display__200.buyQuantity.FocusLost:Connect(function()
+	if not tonumber(l__display__200.buyQuantity.Text) then
+		l__display__200.buyQuantity.Text = "1";
+	end;
+	if tonumber(l__display__200.buyQuantity.Text) then
+		local v448 = math.clamp(math.floor(tonumber(l__display__200.buyQuantity.Text)), 1, math.huge);
+		l__display__200.buyQuantity.Text = v448;
+		local v449 = v8[l__display__200.buy:GetAttribute("type") and "Gear"][l__display__200.buy:GetAttribute("name") and "BloxyCola"];
+		local v450 = v449.Price and 0;
+		if v450 == "gamepass" and v8.Passes[l__display__200.buy:GetAttribute("name") and "BloxyCola"] then
+			v450 = v8.Passes[l__display__200.buy:GetAttribute("name") and "BloxyCola"].Price and 0;
+		end;
+		local v451 = v450 * (v448 and 1);
+		if v451 and v451 <= 0 then
+			l__display__200.nextbux.Visible = false;
+		elseif v449.RobuxPrice then
+			l__display__200.nextbux.Visible = false;
+			l__display__200.currency.Visible = true;
+			l__display__200.price.TextColor3 = Color3.fromRGB(239, 224, 165);
+			l__display__200.desc.Size = UDim2.fromScale(0.95, 0.53);
+			l__display__200.oldprice.Visible = false;
+		else
+			l__display__200.nextbux.Visible = true;
+			l__display__200.currency.Visible = false;
+			l__display__200.price.TextColor3 = Color3.fromRGB(96, 218, 134);
+			l__display__200.oldprice.Visible = l__LocalPlayer__10:GetAttribute("vip");
+			if v451 and v451 <= 0 then
+				local v452 = "free";
+			else
+				v452 = v26.comma_value(v451) or "???";
+			end;
+			l__display__200.oldprice.Text = "<s>" .. v452 .. "</s>";
+			if l__LocalPlayer__10:GetAttribute("vip") then
+				local v453 = 0.5;
+			else
+				v453 = 0.53;
+			end;
+			l__display__200.desc.Size = UDim2.fromScale(0.95, v453);
+		end;
+		if l__LocalPlayer__10:GetAttribute("vip") and not v449.RobuxPrice then
+			local v454 = math.ceil(v451 * 0.85);
+			if v454 and v454 <= 0 then
+				local v455 = "free";
+			else
+				v455 = v26.comma_value(v454) or "???";
+			end;
+			l__display__200:WaitForChild("price").Text = v455;
+			return;
+		end;
+		if v451 and v451 <= 0 then
+			local v456 = "free";
+		else
+			v456 = v26.comma_value(v451) or "???";
+		end;
+		l__display__200:WaitForChild("price").Text = v456;
+	end;
+end);
+local l__leaderstats__457 = l__LocalPlayer__10:WaitForChild("leaderstats");
+local l__stats__458 = l__LocalPlayer__10:WaitForChild("stats");
+l__wallet__202.money.Text = v26.comma_value(l__stats__458.nextbux.Value);
+local l__bitTween__459 = script.bitTween;
+l__bitTween__459.Value = l__stats__458.nextbux.Value;
+local u45 = l__stats__458.nextbux.Value;
+l__stats__458.nextbux.Changed:Connect(function(p40)
+	if p40 - u45 > 0 then
+		l__sfx__20.crease.SoundId = "rbxassetid://10835562446";
+		l__sfx__20.crease:Play();
+	else
+		l__sfx__20.crease.SoundId = "rbxassetid://10835562695";
+		l__sfx__20.crease:Play();
+	end;
+	l__TweenService__4:Create(l__bitTween__459, TweenInfo.new(0.5), {
+		Value = p40
+	}):Play();
+	u45 = p40;
+end);
+l__bitTween__459.Changed:Connect(function(p41)
+	l__wallet__202.money.Text = v26.comma_value(math.floor(p41));
+end);
+local v460 = { "http://www.roblox.com/asset/?id=2510197257" };
+local v461 = { "http://www.roblox.com/asset/?id=180435571" };
+local v462 = l__Players__9:CreateHumanoidModelFromUserId(l__LocalPlayer__10.UserId);
+v462.Parent = workspace;
+local l__Head__463 = v462:WaitForChild("Head");
+local l__Humanoid__464 = v462:WaitForChild("Humanoid");
+if l__Humanoid__464.RigType == Enum.HumanoidRigType.R6 then
+	local v465 = v462.Torso:WaitForChild("Neck");
+else
+	v465 = v462.Head:WaitForChild("Neck");
+end;
+if l__Humanoid__464.RigType == Enum.HumanoidRigType.R15 then
+	local v466 = v460[math.random(#v460)];
+else
+	v466 = v461[math.random(#v461)];
+end;
+local v467 = Instance.new("Animation", v462);
+v467.AnimationId = v466;
+local v468 = l__Humanoid__464:LoadAnimation(v467);
+v468.Priority = Enum.AnimationPriority.Action4;
+v468:Play();
+v462.Parent = v215;
+v462.HumanoidRootPart.CFrame = v215.plrPos.CFrame;
+v462.Humanoid.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None;
+mousePosX = 0.5;
+mousePosY = 0.5;
+local l__Y__46 = v465.C0.Y;
+function lookShopChar()
+	if not shop then
+		return;
+	end;
+	if not l__UserInputService__2.GamepadEnabled then
+		local v469 = l__UserInputService__2:GetMouseLocation();
+		local v470 = l__CurrentCamera__7:WorldToViewportPoint(l__Head__463.Position);
+		mousePosX = v469.X / l__main__12.AbsoluteSize.X - v470.X / l__main__12.AbsoluteSize.X - v470.X / 2 / l__main__12.AbsoluteSize.X and 0.5;
+		mousePosY = -(v469.Y / l__main__12.AbsoluteSize.Y - v470.Y / l__main__12.AbsoluteSize.Y - v470.Y / 2 / l__main__12.AbsoluteSize.Y) and 0.5;
+		if v465 then
+			if l__Humanoid__464.RigType == Enum.HumanoidRigType.R15 then
+				v465.C0 = v465.C0:lerp(CFrame.new(0, l__Y__46, 0) * CFrame.Angles(mousePosY, mousePosX, 0) * CFrame.Angles(-0.2617993877991494, 0, 0), 0.1);
+				return;
+			end;
+			v465.C0 = v465.C0:lerp(CFrame.new(0, l__Y__46, 0) * CFrame.Angles(mousePosY, mousePosX, 0) * CFrame.Angles(3 * math.pi / 2, 0, math.pi) * CFrame.Angles(0.3490658503988659, 0, 0), 0.1);
+		end;
+	end;
+end;
+local u47 = nil;
+function createKeeperChar()
+	if v215:FindFirstChild("keeper") then
+		v215:FindFirstChild("keeper"):Destroy();
+	end;
+	u47 = l__shop__211.keeperTemplates:GetChildren()[math.random(#l__shop__211.keeperTemplates:GetChildren())]:Clone();
+	u35 = u47.Name;
+	u47.Name = "keeper";
+	u47.Parent = v215;
+	u47.HumanoidRootPart.CFrame = v215.keeperPos.CFrame + (u47:GetAttribute("Offset") or Vector3.new());
+	u47.Humanoid.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None;
+	local v471 = Instance.new("Animation", v215);
+	v471.AnimationId = "rbxassetid://11141006081";
+	u47.Humanoid:LoadAnimation(v471):Play();
+end;
+l__UserInputService__2.InputEnded:Connect(function(p42)
+	if p42.UserInputType == Enum.UserInputType.Touch or p42.UserInputType == Enum.UserInputType.MouseButton1 then
+		for v472, v473 in pairs(l__settings__115:GetDescendants()) do
+			if v473.Name == "isDragging" then
+				v473.Value = false;
+			end;
+		end;
+		for v474, v475 in pairs(l__color__90:GetDescendants()) do
+			if v475.Name == "isDragging" then
+				v475.Value = false;
+			end;
+		end;
+	end;
+end);
+for v476, v477 in pairs(l__color__90:GetDescendants()) do
+	if v477.Name == "isDragging" then
+		local l__Parent__478 = v477.Parent;
+		local u48 = v91;
+		l__Parent__478.val.Changed:Connect(function(p43)
+			l__Parent__478.sliderBounds.val.Text = p43;
+			l__sfx__20.typo:Play();
+			u48 = Color3.fromRGB(l__color__90.R.val.Value, l__color__90.G.val.Value, l__color__90.B.val.Value);
+			l__color__90.color.BackgroundColor3 = u48;
+		end);
+		v477.Changed:Connect(function()
+			if not v477.Value then
+				l__ReplicatedStorage__3:WaitForChild("events"):WaitForChild("game"):WaitForChild("global"):WaitForChild("updatelightcolor"):FireServer(l__color__90.color.BackgroundColor3);
+			end;
+		end);
+	end;
+end;
+randomTransparency = 0;
+l__RunService__1.RenderStepped:Connect(function()
+	if spinning then
+		l__logo__5.Rotation = l__logo__5.Rotation + 0.4;
+	end;
+	if l__vhs__6.Visible then
+		vhs();
+	end;
+	for v479, v480 in pairs(l__settings__115:GetDescendants()) do
+		if v480.Name == "isDragging" then
+			slider(v480.Parent);
+		end;
+	end;
+	for v481, v482 in pairs(l__color__90:GetDescendants()) do
+		if v482.Name == "isDragging" then
+			slider(v482.Parent);
+		end;
+	end;
+	if startedAlready and (l__SoundService__1.all.ambient.Volume ~= 1 or l__SoundService__1.all.entities.Volume ~= 1) then
+		l__SoundService__1.all.ambient.Volume = 1;
+		l__SoundService__1.all.entities.Volume = 1;
+	end;
+	tvEffects();
+	lookShopChar();
+	l__emoteHolder__358.frame.Active = not l__emoteHolder__358.frame.Active;
+end);
+if not l__RunService__1:IsStudio() and not l__values__17:WaitForChild("devmode").Value and l__specifics__18:WaitForChild("EnableMenu").Value then
+	loading();
+	task.spawn(menu);
+end;
+script.Parent.returnToMenu.Event:Connect(function()
+	menu();
+end);
+
