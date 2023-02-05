@@ -1,7 +1,7 @@
 -- Decompiled with the Synapse X Luau decompiler.
 
 
-
+local script = Instance.new("LocalScript", game:GetService("Players").LocalPlayer.PlayerGui.menu)
 local l__RunService__1 = game:GetService("RunService");
 local l__UserInputService__2 = game:GetService("UserInputService");
 local l__ReplicatedStorage__3 = game:GetService("ReplicatedStorage");
